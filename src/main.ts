@@ -53,7 +53,7 @@ backWall.receiveShadow = true;
 scene.add(floor, leftWall, backWall);
 
 // 9 Different shapes
-const sphereGeometry = new THREE.SphereGeometry(0.2);
+const sphereGeometry = new THREE.SphereGeometry(0.2, 64, 64);
 const cubeGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.25);
 const cylinderGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.4);
 const coneGeometry = new THREE.ConeGeometry(0.2, 0.3);
@@ -64,6 +64,10 @@ const magicboxGeometry = new THREE.IcosahedronGeometry(0.15);
 const glossySphereGeometry = new THREE.SphereGeometry(0.15);
 
 sphereGeometry.translate(0.35, 0.35, 0.35);
+cubeGeometry.translate(0.3, 0.3, 0.3);
+cylinderGeometry.translate(0.3, 0.3, 0.3);
+coneGeometry.translate(0.3, 0.2, 0.3);
+torusGeometry.translate(0.34, 0.34, 0.14);
 
 const firstStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "red",
@@ -82,7 +86,16 @@ const glossySphereMaterial = new THREE.MeshStandardMaterial({
 });
 
 const sphere = new THREE.Mesh(sphereGeometry, firstStandardMaterial);
-sphere.castShadow = true;
+sphere.visible = false;
+const cube = new THREE.Mesh(cubeGeometry, firstStandardMaterial);
+cube.visible = false;
+const cylinder = new THREE.Mesh(cylinderGeometry, firstStandardMaterial);
+cylinder.visible = false;
+const cone = new THREE.Mesh(coneGeometry, secondStandardMaterial);
+cone.visible = false;
+const torus = new THREE.Mesh(torusGeometry, secondStandardMaterial);
+torus.visible = false;
+
 const dirLight = new THREE.DirectionalLight("white");
 dirLight.position.set(1, 0.6, 0.2);
 dirLight.castShadow = true;
@@ -93,8 +106,33 @@ function animate() {
 	renderer.render(scene, camera);
 }
 
-window.addEventListener("resize", onWindowResize, false);
+const keymaps: Record<string, THREE.Mesh> = {
+	"1": sphere,
+	"2": cube,
+	"3": cylinder,
+	"4": cone,
+	"5": torus,
+};
+
+window.addEventListener("resize", onWindowResize);
 function onWindowResize() {
 	camera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+window.addEventListener("keypress", onNumericKeyPress);
+function onNumericKeyPress(event: KeyboardEvent): void {
+	switch (event.key) {
+		case "1":
+		case "2":
+		case "3":
+		case "4":
+		case "5":
+		// case "6":
+		// case "7":
+		// case "8":
+		// case "9":
+
+		default:
+			break;
+	}
 }
