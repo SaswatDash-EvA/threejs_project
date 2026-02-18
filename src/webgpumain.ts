@@ -27,6 +27,8 @@ document.body.appendChild(renderer.domElement);
 const control = new OrbitControls(camera, renderer.domElement);
 control.enableDamping = true;
 control.dampingFactor = 0.1;
+control.enablePan = true;
+control.panSpeed = 5;
 scene.add(new THREE.AmbientLight("white", 0.4));
 
 const light = new THREE.DirectionalLight("white", 1);
