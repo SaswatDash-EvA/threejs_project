@@ -7,7 +7,8 @@ const camera = new THREE.OrthographicCamera(-aspect, aspect);
 camera.position.set(10, 5, 10);
 camera.lookAt(0, 0, 0);
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
@@ -28,25 +29,31 @@ const floorMaterial = new THREE.MeshStandardMaterial({
 	color: "#c8c6c0",
 	metalness: 0,
 	roughness: 0.75,
+	side: THREE.DoubleSide,
 });
 const leftWallMaterial = new THREE.MeshStandardMaterial({
 	color: "#c5c3bd",
 	metalness: 0,
 	roughness: 0.75,
+	side: THREE.DoubleSide,
 });
 const backWallMaterial = new THREE.MeshStandardMaterial({
 	color: "#d2d0ca",
 	metalness: 0,
 	roughness: 0.75,
+	side: THREE.DoubleSide,
 });
 
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 const leftWall = new THREE.Mesh(leftWallGeomtry, leftWallMaterial);
 const backWall = new THREE.Mesh(backWallGeometry, backWallMaterial);
+floor.receiveShadow = true;
+leftWall.receiveShadow = true;
+backWall.receiveShadow = true;
 scene.add(floor, leftWall, backWall);
 
 // 9 Different shapes
-const sphereGeometry = new THREE.SphereGeometry(0.15);
+const sphereGeometry = new THREE.SphereGeometry(0.2);
 const cubeGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.25);
 const cylinderGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.4);
 const coneGeometry = new THREE.ConeGeometry(0.2, 0.3);
@@ -55,6 +62,8 @@ const capsuleGeometry = new THREE.CapsuleGeometry(0.1, 0.2);
 const pyramidGeometry = new THREE.TetrahedronGeometry(0.2);
 const magicboxGeometry = new THREE.IcosahedronGeometry(0.15);
 const glossySphereGeometry = new THREE.SphereGeometry(0.15);
+
+sphereGeometry.translate(0.35, 0.35, 0.35);
 
 const firstStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "red",
@@ -71,6 +80,14 @@ const glossySphereMaterial = new THREE.MeshStandardMaterial({
 	metalness: 0.95,
 	roughness: 0.02,
 });
+
+const sphere = new THREE.Mesh(sphereGeometry, firstStandardMaterial);
+sphere.castShadow = true;
+const dirLight = new THREE.DirectionalLight("white");
+dirLight.position.set(1, 0.6, 0.2);
+dirLight.castShadow = true;
+
+scene.add(sphere, dirLight);
 
 function animate() {
 	renderer.render(scene, camera);
