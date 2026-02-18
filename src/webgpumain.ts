@@ -23,7 +23,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
 
-new OrbitControls(camera, renderer.domElement);
+// Orbit controls functions for camera
+const control = new OrbitControls(camera, renderer.domElement);
+control.enableDamping = true;
+control.dampingFactor = 0.1;
 scene.add(new THREE.AmbientLight("white", 0.4));
 
 const light = new THREE.DirectionalLight("white", 1);
