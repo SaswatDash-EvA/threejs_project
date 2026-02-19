@@ -3,9 +3,18 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 
 const scene = new THREE.Scene();
 const aspect = window.innerWidth / window.innerHeight;
-const camera = new THREE.OrthographicCamera(-aspect, aspect);
-camera.position.set(10, 5, 10);
-camera.lookAt(0, 0, 0);
+const orthoCamera = new THREE.OrthographicCamera(-aspect, aspect);
+orthoCamera.position.set(10, 5, 10);
+orthoCamera.lookAt(0, 0, 0);
+
+const perspectCamera = new THREE.PerspectiveCamera(
+	60,
+	window.innerWidth / window.innerHeight,
+	0.1,
+	100,
+);
+perspectCamera.position.set(1.8, 0.9, 1.8);
+perspectCamera.lookAt(0, 0, 0);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
@@ -13,7 +22,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
 
-new OrbitControls(camera, renderer.domElement);
+new OrbitControls(orthoCamera, renderer.domElement);
+new OrbitControls(perspectCamera, renderer.domElement);
 
 // Room geometry
 const floorGeometry = new THREE.PlaneGeometry(1, 1);
@@ -56,20 +66,20 @@ scene.add(floor, leftWall, backWall);
 const sphereGeometry = new THREE.SphereGeometry(0.2, 64, 64);
 const cubeGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.25);
 const cylinderGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.4);
-const coneGeometry = new THREE.ConeGeometry(0.2, 0.3);
+const coneGeometry = new THREE.ConeGeometry(0.2, 0.3, 64, 64);
 const torusGeometry = new THREE.TorusGeometry(0.2, 0.08);
-const capsuleGeometry = new THREE.CapsuleGeometry(0.1, 0.2);
+const capsuleGeometry = new THREE.CapsuleGeometry(0.1, 0.2, 64, 64, 64);
 const pyramidGeometry = new THREE.TetrahedronGeometry(0.2);
 const magicboxGeometry = new THREE.IcosahedronGeometry(0.15);
 const glossySphereGeometry = new THREE.SphereGeometry(0.2, 64, 64);
 
 sphereGeometry.translate(0.35, 0.35, 0.35);
-cubeGeometry.translate(0.3, 0.3, 0.3);
-cylinderGeometry.translate(0.3, 0.3, 0.3);
-coneGeometry.translate(0.3, 0.2, 0.3);
-torusGeometry.translate(0.34, 0.34, 0.14);
-capsuleGeometry.translate(0.2, 0.3, 0.2);
-pyramidGeometry.translate(0.2, 0.2, 0.2);
+cubeGeometry.translate(0.5, 0.5, 0.5);
+cylinderGeometry.translate(0.5, 0.5, 0.5);
+coneGeometry.translate(0.5, 0.3, 0.5);
+torusGeometry.translate(0.4, 0.4, 0.3);
+capsuleGeometry.translate(0.4, 0.3, 0.3);
+pyramidGeometry.translate(0.3, 0.3, 0.3);
 magicboxGeometry.translate(0.25, 0.25, 0.25);
 glossySphereGeometry.translate(0.35, 0.35, 0.35);
 
@@ -85,7 +95,7 @@ const secondStandardMaterial = new THREE.MeshStandardMaterial({
 });
 const glossySphereMaterial = new THREE.MeshStandardMaterial({
 	color: "gray",
-	metalness: 0.95,
+	metalness: 0.42,
 	roughness: 0.02,
 });
 
@@ -118,19 +128,30 @@ meshes.forEach((mesh) => {
 });
 meshes[0].visible = true;
 
-const dirLight = new THREE.DirectionalLight("white");
+const dirLight = new THREE.DirectionalLight("white", 2);
 dirLight.position.set(1, 0.6, 0.2);
 dirLight.castShadow = true;
 
-scene.add(dirLight);
+const pointLight = new THREE.PointLight(0xf8f0e3, 1, 0, 1.5);
+pointLight.position.set(0.3, 0.8, 1.2);
+pointLight.castShadow = true;
+// pointLight.visible = false;
+
+const hemisphereLight = new THREE.HemisphereLight(0xfff8e7, 0xf4f8ff, 0.2);
+hemisphereLight.position.set(0.5, 0.5, 2);
+hemisphereLight.castShadow = true;
+// hemisphereLight.visible = false;
+
+// const lightvisibility: Array<boolean> = [true, false, false];
+scene.add(dirLight, pointLight, hemisphereLight);
 
 function animate() {
-	renderer.render(scene, camera);
+	renderer.render(scene, perspectCamera);
 }
 
 window.addEventListener("resize", onWindowResize);
 function onWindowResize() {
-	camera.updateProjectionMatrix();
+	orthoCamera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 window.addEventListener("keypress", onNumericKeyPress);
@@ -150,6 +171,9 @@ function onNumericKeyPress(event: KeyboardEvent): void {
 				mesh.visible = mesh === meshes[index];
 			});
 			break;
+
+		// case "a":
+		// case "A":
 
 		default:
 			break;
