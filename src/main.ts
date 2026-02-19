@@ -58,16 +58,20 @@ const cubeGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.25);
 const cylinderGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.4);
 const coneGeometry = new THREE.ConeGeometry(0.2, 0.3);
 const torusGeometry = new THREE.TorusGeometry(0.2, 0.08);
-// const capsuleGeometry = new THREE.CapsuleGeometry(0.1, 0.2);
-// const pyramidGeometry = new THREE.TetrahedronGeometry(0.2);
-// const magicboxGeometry = new THREE.IcosahedronGeometry(0.15);
-// const glossySphereGeometry = new THREE.SphereGeometry(0.15);
+const capsuleGeometry = new THREE.CapsuleGeometry(0.1, 0.2);
+const pyramidGeometry = new THREE.TetrahedronGeometry(0.2);
+const magicboxGeometry = new THREE.IcosahedronGeometry(0.15);
+const glossySphereGeometry = new THREE.SphereGeometry(0.2, 64, 64);
 
 sphereGeometry.translate(0.35, 0.35, 0.35);
 cubeGeometry.translate(0.3, 0.3, 0.3);
 cylinderGeometry.translate(0.3, 0.3, 0.3);
 coneGeometry.translate(0.3, 0.2, 0.3);
 torusGeometry.translate(0.34, 0.34, 0.14);
+capsuleGeometry.translate(0.2, 0.3, 0.2);
+pyramidGeometry.translate(0.2, 0.2, 0.2);
+magicboxGeometry.translate(0.25, 0.25, 0.25);
+glossySphereGeometry.translate(0.35, 0.35, 0.35);
 
 const firstStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "red",
@@ -79,40 +83,50 @@ const secondStandardMaterial = new THREE.MeshStandardMaterial({
 	metalness: 0.25,
 	roughness: 0.48,
 });
-// const glossySphereMaterial = new THREE.MeshStandardMaterial({
-// 	color: "gray",
-// 	metalness: 0.95,
-// 	roughness: 0.02,
-// });
+const glossySphereMaterial = new THREE.MeshStandardMaterial({
+	color: "gray",
+	metalness: 0.95,
+	roughness: 0.02,
+});
 
 const sphere = new THREE.Mesh(sphereGeometry, firstStandardMaterial);
-// sphere.visible = false;
 const cube = new THREE.Mesh(cubeGeometry, firstStandardMaterial);
-cube.visible = false;
 const cylinder = new THREE.Mesh(cylinderGeometry, firstStandardMaterial);
-cylinder.visible = false;
 const cone = new THREE.Mesh(coneGeometry, secondStandardMaterial);
-cone.visible = false;
 const torus = new THREE.Mesh(torusGeometry, secondStandardMaterial);
-torus.visible = false;
+const capsule = new THREE.Mesh(capsuleGeometry, secondStandardMaterial);
+const pyramid = new THREE.Mesh(pyramidGeometry, secondStandardMaterial);
+const magicbox = new THREE.Mesh(magicboxGeometry, secondStandardMaterial);
+const glossySphere = new THREE.Mesh(glossySphereGeometry, glossySphereMaterial);
+
+const meshes: Array<THREE.Mesh> = [
+	sphere,
+	cube,
+	cylinder,
+	cone,
+	torus,
+	capsule,
+	pyramid,
+	magicbox,
+	glossySphere,
+];
+meshes.forEach((mesh) => {
+	mesh.visible = false;
+	mesh.castShadow = true;
+	mesh.receiveShadow = true;
+	scene.add(mesh);
+});
+meshes[0].visible = true;
 
 const dirLight = new THREE.DirectionalLight("white");
 dirLight.position.set(1, 0.6, 0.2);
 dirLight.castShadow = true;
 
-scene.add(sphere, dirLight);
+scene.add(dirLight);
 
 function animate() {
 	renderer.render(scene, camera);
 }
-
-// const keymaps: Record<string, THREE.Mesh> = {
-// 	"1": sphere,
-// 	"2": cube,
-// 	"3": cylinder,
-// 	"4": cone,
-// 	"5": torus,
-// };
 
 window.addEventListener("resize", onWindowResize);
 function onWindowResize() {
@@ -127,10 +141,15 @@ function onNumericKeyPress(event: KeyboardEvent): void {
 		case "3":
 		case "4":
 		case "5":
-		// case "6":
-		// case "7":
-		// case "8":
-		// case "9":
+		case "6":
+		case "7":
+		case "8":
+		case "9":
+			const index = parseInt(event.key) - 1;
+			meshes.forEach((mesh) => {
+				mesh.visible = mesh === meshes[index];
+			});
+			break;
 
 		default:
 			break;
