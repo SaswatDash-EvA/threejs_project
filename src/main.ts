@@ -16,6 +16,8 @@ const perspectCamera = new THREE.PerspectiveCamera(
 perspectCamera.position.set(1.8, 0.9, 1.8);
 perspectCamera.lookAt(0, 0, 0);
 
+let activeCamera: THREE.Camera = orthoCamera;
+
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -93,7 +95,7 @@ const secondStandardMaterial = new THREE.MeshStandardMaterial({
 	metalness: 0.25,
 	roughness: 0.48,
 });
-const glossySphereMaterial = new THREE.MeshStandardMaterial({
+const glossyStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "gray",
 	metalness: 0.42,
 	roughness: 0.02,
@@ -102,12 +104,15 @@ const glossySphereMaterial = new THREE.MeshStandardMaterial({
 const sphere = new THREE.Mesh(sphereGeometry, firstStandardMaterial);
 const cube = new THREE.Mesh(cubeGeometry, firstStandardMaterial);
 const cylinder = new THREE.Mesh(cylinderGeometry, firstStandardMaterial);
-const cone = new THREE.Mesh(coneGeometry, secondStandardMaterial);
-const torus = new THREE.Mesh(torusGeometry, secondStandardMaterial);
-const capsule = new THREE.Mesh(capsuleGeometry, secondStandardMaterial);
-const pyramid = new THREE.Mesh(pyramidGeometry, secondStandardMaterial);
-const magicbox = new THREE.Mesh(magicboxGeometry, secondStandardMaterial);
-const glossySphere = new THREE.Mesh(glossySphereGeometry, glossySphereMaterial);
+const cone = new THREE.Mesh(coneGeometry, firstStandardMaterial);
+const torus = new THREE.Mesh(torusGeometry, firstStandardMaterial);
+const capsule = new THREE.Mesh(capsuleGeometry, firstStandardMaterial);
+const pyramid = new THREE.Mesh(pyramidGeometry, firstStandardMaterial);
+const magicbox = new THREE.Mesh(magicboxGeometry, firstStandardMaterial);
+const glossySphere = new THREE.Mesh(
+	glossySphereGeometry,
+	firstStandardMaterial,
+);
 
 const meshes: Array<THREE.Mesh> = [
 	sphere,
@@ -135,18 +140,24 @@ dirLight.castShadow = true;
 const pointLight = new THREE.PointLight(0xf8f0e3, 1, 0, 1.5);
 pointLight.position.set(0.3, 0.8, 1.2);
 pointLight.castShadow = true;
-// pointLight.visible = false;
+pointLight.visible = false;
 
 const hemisphereLight = new THREE.HemisphereLight(0xfff8e7, 0xf4f8ff, 0.2);
 hemisphereLight.position.set(0.5, 0.5, 2);
 hemisphereLight.castShadow = true;
-// hemisphereLight.visible = false;
+hemisphereLight.visible = false;
 
-// const lightvisibility: Array<boolean> = [true, false, false];
+const lightvisibility: Array<boolean> = [true, false, false];
 scene.add(dirLight, pointLight, hemisphereLight);
 
 function animate() {
-	renderer.render(scene, perspectCamera);
+	renderer.render(scene, activeCamera);
+}
+
+function updateLights() {
+	dirLight.visible = lightvisibility[0];
+	pointLight.visible = lightvisibility[1];
+	hemisphereLight.visible = lightvisibility[2];
 }
 
 window.addEventListener("resize", onWindowResize);
@@ -172,8 +183,50 @@ function onNumericKeyPress(event: KeyboardEvent): void {
 			});
 			break;
 
-		// case "a":
-		// case "A":
+		case "a":
+		case "A":
+			lightvisibility[0] = lightvisibility[0] ? false : true;
+			updateLights();
+			break;
+
+		case "b":
+		case "B":
+			lightvisibility[1] = lightvisibility[1] ? false : true;
+			updateLights();
+			break;
+
+		case "c":
+		case "C":
+			lightvisibility[2] = lightvisibility[2] ? false : true;
+			updateLights();
+			break;
+
+		case "l":
+		case "L":
+			activeCamera =
+				activeCamera == perspectCamera ? orthoCamera : perspectCamera;
+			break;
+
+		case "f":
+		case "F":
+			meshes.forEach((mesh) => {
+				mesh.material = firstStandardMaterial;
+			});
+			break;
+
+		case "s":
+		case "S":
+			meshes.forEach((mesh) => {
+				mesh.material = secondStandardMaterial;
+			});
+			break;
+
+		case "g":
+		case "G":
+			meshes.forEach((mesh) => {
+				mesh.material = glossyStandardMaterial;
+			});
+			break;
 
 		default:
 			break;
