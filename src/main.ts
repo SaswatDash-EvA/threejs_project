@@ -85,17 +85,17 @@ pyramidGeometry.translate(0.3, 0.3, 0.3);
 magicboxGeometry.translate(0.25, 0.25, 0.25);
 glossySphereGeometry.translate(0.35, 0.35, 0.35);
 
-const firstStandardMaterial = new THREE.MeshStandardMaterial({
+export const firstStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "red",
 	metalness: 0.2,
 	roughness: 0.6,
 });
-const secondStandardMaterial = new THREE.MeshStandardMaterial({
+export const secondStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "blue",
 	metalness: 0.25,
 	roughness: 0.48,
 });
-const glossyStandardMaterial = new THREE.MeshStandardMaterial({
+export const glossyStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "gray",
 	metalness: 0.42,
 	roughness: 0.02,
@@ -114,7 +114,7 @@ const glossySphere = new THREE.Mesh(
 	firstStandardMaterial,
 );
 
-const meshes: Array<THREE.Mesh> = [
+export const meshes: Array<THREE.Mesh> = [
 	sphere,
 	cube,
 	cylinder,
@@ -147,14 +147,14 @@ hemisphereLight.position.set(0.5, 0.5, 2);
 hemisphereLight.castShadow = true;
 hemisphereLight.visible = false;
 
-const lightvisibility: Array<boolean> = [true, false, false];
+export const lightvisibility: Array<boolean> = [true, false, false];
 scene.add(dirLight, pointLight, hemisphereLight);
 
 function animate() {
 	renderer.render(scene, activeCamera);
 }
 
-function updateLights() {
+export function updateLights() {
 	dirLight.visible = lightvisibility[0];
 	pointLight.visible = lightvisibility[1];
 	hemisphereLight.visible = lightvisibility[2];

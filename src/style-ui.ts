@@ -1,3 +1,5 @@
+import { lightvisibility, meshes, firstStandardMaterial, secondStandardMaterial, glossyStandardMaterial, updateLights } from "./main";
+
 const shapes =
 	document.querySelectorAll<HTMLAnchorElement>("#shapesDropdown a");
 const materials = document.querySelectorAll<HTMLAnchorElement>(
@@ -39,6 +41,34 @@ function updateUI(): void {
 		cameraText.textContent = isPerspective ? "Perspective" : "Orthographic";
 	}
 }
+
+const materialsArray = [ firstStandardMaterial, secondStandardMaterial, glossyStandardMaterial ];
+const dropdownItems = document.querySelectorAll<HTMLAnchorElement>('a');
+dropdownItems.forEach((dropdownItem) => {
+	dropdownItem.addEventListener('click', () => { 
+		if (dropdownItem.parentElement?.id === "shapesDropdown") {
+			const shapeid = parseInt(dropdownItem.getAttribute("data-index")!);
+			currentShape = shapeid;
+			meshes.forEach((mesh) => {
+				mesh.visible = mesh === meshes[shapeid];
+			});
+		}
+		else if (dropdownItem.parentElement?.id === "materialsDropdown") {
+			const materialId = parseInt(dropdownItem.getAttribute("data-index")!);
+			currentMaterial = materialId;
+			meshes.forEach((mesh) => {
+				mesh.material = materialsArray[materialId];
+			});
+		}
+		else if (dropdownItem.parentElement?.id === "lightingDropdown") {
+			const lightId = parseInt(dropdownItem.getAttribute("data-index")!, 10);
+			lightsOn[lightId] = !lightsOn[lightId];
+			lightvisibility[lightId] = !lightvisibility[lightId];
+			updateLights();
+		}
+		updateUI();
+	});
+});
 
 document.addEventListener("keydown", (event: KeyboardEvent): void => {
 	const key = event.key;
