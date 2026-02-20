@@ -185,19 +185,19 @@ function onNumericKeyPress(event: KeyboardEvent): void {
 
 		case "a":
 		case "A":
-			lightvisibility[0] = lightvisibility[0] ? false : true;
+			lightvisibility[0] = !lightvisibility[0];
 			updateLights();
 			break;
 
 		case "b":
 		case "B":
-			lightvisibility[1] = lightvisibility[1] ? false : true;
+			lightvisibility[1] = !lightvisibility[1];
 			updateLights();
 			break;
 
 		case "c":
 		case "C":
-			lightvisibility[2] = lightvisibility[2] ? false : true;
+			lightvisibility[2] = !lightvisibility[2];
 			updateLights();
 			break;
 

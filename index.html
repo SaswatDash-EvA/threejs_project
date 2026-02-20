@@ -3,15 +3,75 @@
 	<head>
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<link rel="stylesheet" href="./src/ui-styles.css" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>threejs_vanila</title>
-		<style>
-			body {
-				margin: 0;
-			}
-		</style>
 	</head>
 	<body>
 		<script type="module" src="./src/main.ts"></script>
+		<div id="ui-overlay">
+			<div class="top-header">
+				<div class="dropdown">
+					<button class="dropbtn">Shapes</button>
+					<div class="dropdown-content" id="shapesDropdown">
+						<a data-index="0">1 - Sphere</a>
+						<a data-index="1">2 - Cube</a>
+						<a data-index="2">3 - Cylinder</a>
+						<a data-index="3">4 - Cone</a>
+						<a data-index="4">5 - Torus</a>
+						<a data-index="5">6 - Capsule</a>
+						<a data-index="6">7 - Pyramid</a>
+						<a data-index="7">8 - Icosahedron</a>
+						<a data-index="8">9 - Sphere</a>
+					</div>
+				</div>
+
+				<div class="dropdown">
+					<button class="dropbtn">Materials</button>
+					<div class="dropdown-content" id="materialsDropdown">
+						<a data-index="0">F - Material 1</a>
+						<a data-index="1">S - Material 2</a>
+						<a data-index="2">G - Material 3</a>
+					</div>
+				</div>
+
+				<div class="dropdown">
+					<button class="dropbtn">Lighting</button>
+					<div class="dropdown-content" id="lightingDropdown">
+						<a data-index="0">A - Directional Light</a>
+						<a data-index="1">B - Point Light</a>
+						<a data-index="2">C - Hemispherical Light</a>
+					</div>
+				</div>
+
+				<div class="camera-info">
+					Camera: <span id="cameraType">Perspective</span> (Press L)
+				</div>
+			</div>
+
+			<!-- Right Help Panel -->
+			<div class="right-panel">
+				<h3>Controls</h3>
+				<p><strong>1-9</strong> → Change Shapes</p>
+				<p><strong>F / S / G</strong> → Change Materials</p>
+				<p><strong>A / B / C</strong> → Toggle Lights</p>
+				<p>
+					<strong>L</strong> → Switch Camera (Orthographic /
+					Perspective)
+				</p>
+			</div>
+
+			<!-- Profile Bottom Left -->
+			<div class="profile-card">
+				<img src="saswat_image.jpg" alt="Profile" />
+				<div>
+					<div class="name">Saswat Kumar Dash</div>
+					<div class="role">
+						Software Engineer - Configurator Design
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="module" src="./src/style-ui.ts"></script>
 	</body>
 </html>
