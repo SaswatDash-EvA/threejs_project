@@ -64,6 +64,23 @@ leftWall.receiveShadow = true;
 backWall.receiveShadow = true;
 scene.add(floor, leftWall, backWall);
 
+// Shape for the extruded rectangle
+let renctangleLength = 0.5, renctangleWidth = 0.4, rectangleDepth = 0.2;
+let circleRadius = 0.06;
+const rectangleShape = new THREE.Shape([
+	new THREE.Vector2(renctangleLength/2, renctangleWidth/2),
+	new THREE.Vector2(renctangleLength/2, -renctangleWidth/2),
+	new THREE.Vector2(-renctangleLength/2, -renctangleWidth/2),
+	new THREE.Vector2(-renctangleLength/2, renctangleWidth/2)
+]);
+rectangleShape.closePath();
+const holes = [ new THREE.Path(), new THREE.Path(), new THREE.Path(), new THREE.Path() ];
+holes[0].absarc(renctangleLength/4, renctangleWidth/4, circleRadius, 0, 2*Math.PI );
+holes[1].absarc(renctangleLength/4, -renctangleWidth/4, circleRadius, 0, 2*Math.PI );
+holes[2].absarc(-renctangleLength/4, -renctangleWidth/4, circleRadius, 0, 2*Math.PI );
+holes[3].absarc(-renctangleLength/4, renctangleWidth/4, circleRadius, 0, 2*Math.PI );
+rectangleShape.holes.push(...holes);
+
 // 9 Different shapes
 const sphereGeometry = new THREE.SphereGeometry(0.2, 64, 64);
 const cubeGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.25);
@@ -73,7 +90,10 @@ const torusGeometry = new THREE.TorusGeometry(0.2, 0.08);
 const capsuleGeometry = new THREE.CapsuleGeometry(0.1, 0.2, 64, 64, 64);
 const pyramidGeometry = new THREE.TetrahedronGeometry(0.2);
 const magicboxGeometry = new THREE.IcosahedronGeometry(0.15);
-const glossySphereGeometry = new THREE.SphereGeometry(0.2, 64, 64);
+const extrudedRectangleGeometry = new THREE.ExtrudeGeometry(rectangleShape, {
+	depth: rectangleDepth,
+	bevelEnabled: false
+});
 
 sphereGeometry.translate(0.35, 0.35, 0.35);
 cubeGeometry.translate(0.5, 0.5, 0.5);
@@ -83,7 +103,8 @@ torusGeometry.translate(0.4, 0.4, 0.3);
 capsuleGeometry.translate(0.4, 0.3, 0.3);
 pyramidGeometry.translate(0.3, 0.3, 0.3);
 magicboxGeometry.translate(0.25, 0.25, 0.25);
-glossySphereGeometry.translate(0.35, 0.35, 0.35);
+extrudedRectangleGeometry.translate(-0.3, 0.3, 0.3);
+extrudedRectangleGeometry.rotateY(Math.PI/2);
 
 export const firstStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "red",
@@ -93,12 +114,12 @@ export const firstStandardMaterial = new THREE.MeshStandardMaterial({
 export const secondStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "blue",
 	metalness: 0.25,
-	roughness: 0.48,
+	roughness: 0.48
 });
 export const glossyStandardMaterial = new THREE.MeshStandardMaterial({
 	color: "gray",
 	metalness: 0.42,
-	roughness: 0.02,
+	roughness: 0.02
 });
 
 const sphere = new THREE.Mesh(sphereGeometry, firstStandardMaterial);
@@ -110,7 +131,7 @@ const capsule = new THREE.Mesh(capsuleGeometry, firstStandardMaterial);
 const pyramid = new THREE.Mesh(pyramidGeometry, firstStandardMaterial);
 const magicbox = new THREE.Mesh(magicboxGeometry, firstStandardMaterial);
 const glossySphere = new THREE.Mesh(
-	glossySphereGeometry,
+	extrudedRectangleGeometry,
 	firstStandardMaterial,
 );
 
