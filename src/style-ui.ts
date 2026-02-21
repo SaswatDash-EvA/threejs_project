@@ -1,3 +1,4 @@
+import { disableExtrudeGeometry, enableExtrudeGeometry } from "./extrudeGeo";
 import { lightvisibility, meshes, firstStandardMaterial, secondStandardMaterial, glossyStandardMaterial, updateLights } from "./main";
 
 const shapes =
@@ -52,6 +53,8 @@ dropdownItems.forEach((dropdownItem) => {
 			meshes.forEach((mesh) => {
 				mesh.visible = mesh === meshes[shapeid];
 			});
+			if (shapeid == 8) enableExtrudeGeometry();
+			else disableExtrudeGeometry();
 		}
 		else if (dropdownItem.parentElement?.id === "materialsDropdown") {
 			const materialId = parseInt(dropdownItem.getAttribute("data-index")!);

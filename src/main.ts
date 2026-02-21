@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import { disableExtrudeGeometry, enableExtrudeGeometry } from "./extrudeGeo";
+// import { enableExtrudeGeometry } from "./style-ui";
 
 const scene = new THREE.Scene();
 const aspect = window.innerWidth / window.innerHeight;
@@ -65,20 +67,24 @@ backWall.receiveShadow = true;
 scene.add(floor, leftWall, backWall);
 
 // Shape for the extruded rectangle
-let renctangleLength = 0.5, renctangleWidth = 0.4, rectangleDepth = 0.2;
+export let rectangleLength = 0.5, rectangleWidth = 0.4, rectangleDepth = 0.2;
 let circleRadius = 0.06;
+export function updateRectangleLength(num: number) { rectangleLength = num; }
+export function updateRectangleWidth(num: number) { rectangleWidth = num; }
+export function updateRectangleDepth(num: number) { rectangleDepth = num; }
+export function updateCircleRadius(num: number) { circleRadius = num; }
 const rectangleShape = new THREE.Shape([
-	new THREE.Vector2(renctangleLength/2, renctangleWidth/2),
-	new THREE.Vector2(renctangleLength/2, -renctangleWidth/2),
-	new THREE.Vector2(-renctangleLength/2, -renctangleWidth/2),
-	new THREE.Vector2(-renctangleLength/2, renctangleWidth/2)
+	new THREE.Vector2(rectangleLength/2, rectangleWidth/2),
+	new THREE.Vector2(rectangleLength/2, -rectangleWidth/2),
+	new THREE.Vector2(-rectangleLength/2, -rectangleWidth/2),
+	new THREE.Vector2(-rectangleLength/2, rectangleWidth/2)
 ]);
 rectangleShape.closePath();
 const holes = [ new THREE.Path(), new THREE.Path(), new THREE.Path(), new THREE.Path() ];
-holes[0].absarc(renctangleLength/4, renctangleWidth/4, circleRadius, 0, 2*Math.PI );
-holes[1].absarc(renctangleLength/4, -renctangleWidth/4, circleRadius, 0, 2*Math.PI );
-holes[2].absarc(-renctangleLength/4, -renctangleWidth/4, circleRadius, 0, 2*Math.PI );
-holes[3].absarc(-renctangleLength/4, renctangleWidth/4, circleRadius, 0, 2*Math.PI );
+holes[0].absarc(rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI );
+holes[1].absarc(rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI );
+holes[2].absarc(-rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI );
+holes[3].absarc(-rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI );
 rectangleShape.holes.push(...holes);
 
 // 9 Different shapes
@@ -130,10 +136,7 @@ const torus = new THREE.Mesh(torusGeometry, firstStandardMaterial);
 const capsule = new THREE.Mesh(capsuleGeometry, firstStandardMaterial);
 const pyramid = new THREE.Mesh(pyramidGeometry, firstStandardMaterial);
 const magicbox = new THREE.Mesh(magicboxGeometry, firstStandardMaterial);
-const glossySphere = new THREE.Mesh(
-	extrudedRectangleGeometry,
-	firstStandardMaterial,
-);
+const extrudedRectangle = new THREE.Mesh(extrudedRectangleGeometry, firstStandardMaterial);
 
 export const meshes: Array<THREE.Mesh> = [
 	sphere,
@@ -144,8 +147,33 @@ export const meshes: Array<THREE.Mesh> = [
 	capsule,
 	pyramid,
 	magicbox,
-	glossySphere,
+	extrudedRectangle
 ];
+
+export function updateExtrudedRectangle() {
+	const newShape = new THREE.Shape([
+		new THREE.Vector2(rectangleLength/2, rectangleWidth/2),
+		new THREE.Vector2(rectangleLength/2, -rectangleWidth/2),
+		new THREE.Vector2(-rectangleLength/2, -rectangleWidth/2),
+		new THREE.Vector2(-rectangleLength/2, rectangleWidth/2)
+	]);
+	newShape.closePath();
+	const newHoles = [ new THREE.Path(), new THREE.Path(), new THREE.Path(), new THREE.Path() ];
+	newHoles[0].absarc(rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI );
+	newHoles[1].absarc(rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI );
+	newHoles[2].absarc(-rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI );
+	newHoles[3].absarc(-rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI );
+	newShape.holes.push(...newHoles);
+
+	const newGeometry = new THREE.ExtrudeGeometry(newShape, {
+		depth: rectangleDepth,
+		bevelEnabled: false
+	});
+	newGeometry.translate(-0.3, 0.3, 0.3);
+	newGeometry.rotateY(Math.PI/2);
+	extrudedRectangle.geometry = newGeometry;
+}
+
 meshes.forEach((mesh) => {
 	mesh.visible = false;
 	mesh.castShadow = true;
@@ -202,6 +230,8 @@ function onNumericKeyPress(event: KeyboardEvent): void {
 			meshes.forEach((mesh) => {
 				mesh.visible = mesh === meshes[index];
 			});
+			if (index == 8) enableExtrudeGeometry();
+			else disableExtrudeGeometry();
 			break;
 
 		case "a":

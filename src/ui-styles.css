@@ -85,9 +85,6 @@ canvas {
 }
 
 .right-panel {
-	position: absolute;
-	right: 20px;
-	top: 70px;
 	width: 350px;
 	background: #00000099;
 	padding: 15px;
@@ -95,6 +92,18 @@ canvas {
 	pointer-events: auto;
 	border-radius: 20px;
 	border: 2px solid #ffffff;
+}
+
+#info-panel {
+	position: absolute;
+	right: 20px;
+	top: 70px;
+}
+
+#extrude-info {
+	position: absolute;
+	right: 20px;
+	top: 430px;
 }
 
 .profile-card {
