@@ -1,4 +1,4 @@
-import { lightvisibility, meshes, firstStandardMaterial, secondStandardMaterial, glossyStandardMaterial, updateLights, rectangleLength, rectangleWidth, updateRectangleLength, updateRectangleWidth, updateRectangleDepth, updateCircleRadius, updateExtrudedRectangle } from "./main";
+import { lightvisibility, meshes, firstStandardMaterial, secondStandardMaterial, glossyStandardMaterial, updateLights, rectangleLength, rectangleWidth, updateRectangleLength, updateRectangleWidth, updateRectangleDepth, updateCircleRadius, updateExtrudedRectangle, rectangleDepth } from "./main";
 
 export function enableExtrudeGeometry() {
 	const extrudeInfo = document.getElementById("extrude-info") as HTMLDivElement;
@@ -19,8 +19,9 @@ export function enableExtrudeGeometry() {
 			if (element.getAttribute("name") === "rectangle-width") updateRectangleWidth(parseFloat(this.value));
 			if (element.getAttribute("name") === "rectangle-depth") updateRectangleDepth(parseFloat(this.value));
 			if (element.getAttribute("name") === "circle-radius") updateCircleRadius(parseFloat(this.value));
-		});
-		updateExtrudedRectangle();
+
+			updateExtrudedRectangle();
+		});		
 	});
 }
 

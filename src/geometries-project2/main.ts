@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { disableExtrudeGeometry, enableExtrudeGeometry } from "./style-ui";
-// import { enableExtrudeGeometry } from "./style-ui";
 
 const scene = new THREE.Scene();
 const aspect = window.innerWidth / window.innerHeight;
@@ -136,7 +135,7 @@ const torus = new THREE.Mesh(torusGeometry, firstStandardMaterial);
 const capsule = new THREE.Mesh(capsuleGeometry, firstStandardMaterial);
 const pyramid = new THREE.Mesh(pyramidGeometry, firstStandardMaterial);
 const magicbox = new THREE.Mesh(magicboxGeometry, firstStandardMaterial);
-const extrudedRectangle = new THREE.Mesh(extrudedRectangleGeometry, firstStandardMaterial);
+let extrudedRectangle = new THREE.Mesh(extrudedRectangleGeometry, firstStandardMaterial);
 
 export const meshes: Array<THREE.Mesh> = [
 	sphere,
@@ -151,27 +150,41 @@ export const meshes: Array<THREE.Mesh> = [
 ];
 
 export function updateExtrudedRectangle() {
-	const newShape = new THREE.Shape([
-		new THREE.Vector2(rectangleLength/2, rectangleWidth/2),
-		new THREE.Vector2(rectangleLength/2, -rectangleWidth/2),
-		new THREE.Vector2(-rectangleLength/2, -rectangleWidth/2),
-		new THREE.Vector2(-rectangleLength/2, rectangleWidth/2)
-	]);
-	newShape.closePath();
-	const newHoles = [ new THREE.Path(), new THREE.Path(), new THREE.Path(), new THREE.Path() ];
-	newHoles[0].absarc(rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI );
-	newHoles[1].absarc(rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI );
-	newHoles[2].absarc(-rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI );
-	newHoles[3].absarc(-rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI );
-	newShape.holes.push(...newHoles);
+	if (extrudedRectangle) {
+        extrudedRectangle.geometry.dispose();
+    }
 
-	const newGeometry = new THREE.ExtrudeGeometry(newShape, {
-		depth: rectangleDepth,
-		bevelEnabled: false
-	});
-	newGeometry.translate(-0.3, 0.3, 0.3);
-	newGeometry.rotateY(Math.PI/2);
-	extrudedRectangle.geometry = newGeometry;
+    const rectangleShape = new THREE.Shape([
+        new THREE.Vector2(rectangleLength/2, rectangleWidth/2),
+        new THREE.Vector2(rectangleLength/2, -rectangleWidth/2),
+        new THREE.Vector2(-rectangleLength/2, -rectangleWidth/2),
+        new THREE.Vector2(-rectangleLength/2, rectangleWidth/2)
+    ]);
+    rectangleShape.closePath();
+
+    const holes = [
+        new THREE.Path(),
+        new THREE.Path(),
+        new THREE.Path(),
+        new THREE.Path()
+    ];
+
+    holes[0].absarc(rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI);
+    holes[1].absarc(rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI);
+    holes[2].absarc(-rectangleLength/4, -rectangleWidth/4, circleRadius, 0, 2*Math.PI);
+    holes[3].absarc(-rectangleLength/4, rectangleWidth/4, circleRadius, 0, 2*Math.PI);
+
+    rectangleShape.holes.push(...holes);
+
+    const newGeometry = new THREE.ExtrudeGeometry(rectangleShape, {
+        depth: rectangleDepth,
+        bevelEnabled: false
+    });
+
+    newGeometry.translate(-0.3, 0.3, 0.3);
+    newGeometry.rotateY(Math.PI/2);
+
+    extrudedRectangle.geometry = newGeometry;
 }
 
 meshes.forEach((mesh) => {
