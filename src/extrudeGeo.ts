@@ -1,5 +1,7 @@
 import { rectangleLength, rectangleWidth, updateCircleRadius, updateExtrudedRectangle, updateRectangleDepth, updateRectangleLength, updateRectangleWidth } from "./main";
 
+
+
 export function enableExtrudeGeometry() {
 	const extrudeInfo = document.getElementById("extrude-info") as HTMLDivElement;
 	if (extrudeInfo) {
