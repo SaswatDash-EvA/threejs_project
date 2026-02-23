@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
-import { disableExtrudeGeometry, enableExtrudeGeometry } from "./extrudeGeo";
+import { disableExtrudeGeometry, enableExtrudeGeometry } from "./style-ui";
 // import { enableExtrudeGeometry } from "./style-ui";
 
 const scene = new THREE.Scene();

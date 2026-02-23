@@ -24,11 +24,14 @@ document.body.appendChild(renderer.domElement);
 
 new OrbitControls(camera, renderer.domElement);
 
+let extrudeRectangleLength = 0.4, extrudeRectangleWidth = 0.4;
+let angle = Math.PI/4;
+
 const squareShape = new THREE.Shape([
-    new THREE.Vector2(0.2, 0.2),
-    new THREE.Vector2(0.2, -0.2),
-    new THREE.Vector2(-0.2, -0.2),
-    new THREE.Vector2(-0.2, 0.2)
+    new THREE.Vector2(extrudeRectangleLength/2, extrudeRectangleWidth/2),
+    new THREE.Vector2(extrudeRectangleLength/2, -extrudeRectangleWidth/2),
+    new THREE.Vector2(-extrudeRectangleLength/2, -extrudeRectangleWidth/2),
+    new THREE.Vector2(-extrudeRectangleLength/2, extrudeRectangleWidth/2)
 ]);
 squareShape.closePath();
 
@@ -40,12 +43,12 @@ const trapizoidBrush = new Brush(trapizoidGeometry);
 trapizoidBrush.position.z = -1;
 trapizoidBrush.updateMatrixWorld();
 
-const brush1 = new Brush(new THREE.BoxGeometry(0.4 * Math.sqrt(2), 0.4 * Math.sqrt(2), 0.8 / Math.sqrt(2)));
+const brush1 = new Brush(new THREE.BoxGeometry(extrudeRectangleLength, extrudeRectangleWidth / Math.sin(angle), 2 * extrudeRectangleWidth * Math.cos(angle)));
 brush1.position.set(0, 0.2, 1);
 brush1.rotateX(-Math.PI / 4);
 brush1.updateMatrixWorld();
 
-const brush2 = new Brush(new THREE.BoxGeometry(0.4 * Math.sqrt(2), 0.4 * Math.sqrt(2), 0.8 / Math.sqrt(2)));
+const brush2 = new Brush(new THREE.BoxGeometry(0.4, 0.4 * Math.sqrt(2), 0.8 / Math.sqrt(2)));
 brush2.position.set(0, 0.2, -1);
 brush2.rotateX(Math.PI / 4);
 brush2.updateMatrixWorld();
