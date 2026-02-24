@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
-import { SUBTRACTION, Brush, Evaluator } from "three-bvh-csg";
+import { BufferGeometryUtils } from "three/examples/jsm/Addons.js";
 
 const scene = new THREE.Scene();
 const aspect = window.innerWidth / window.innerHeight;
@@ -10,7 +10,7 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     100,
 );
-camera.position.set(2, 0, 1);
+camera.position.set(2, 1, 0);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.localClippingEnabled = true;
@@ -22,53 +22,61 @@ renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
 
 const control = new OrbitControls(camera, renderer.domElement);
-control.target.set(0, 0, 1);
 control.update();
 
-let extrudeRectangleLength = 0.4, extrudeRectangleWidth = 0.4;
-let angle = Math.PI/4;
+let extrudeRectangleLength = 0.5, extrudeRectangleWidth = 0.5, extrudeDepth = 2;
+let angle1 = Math.PI/4, angle2 = Math.PI/4;
 
-const squareShape = new THREE.Shape([
-    new THREE.Vector2(extrudeRectangleLength/2, extrudeRectangleWidth/2),
-    new THREE.Vector2(extrudeRectangleLength/2, -extrudeRectangleWidth/2),
-    new THREE.Vector2(-extrudeRectangleLength/2, -extrudeRectangleWidth/2),
-    new THREE.Vector2(-extrudeRectangleLength/2, extrudeRectangleWidth/2)
-]);
+const squareShape = new THREE.Shape();
+squareShape.moveTo(extrudeRectangleLength/2, extrudeRectangleWidth/2);
+squareShape.lineTo(extrudeRectangleLength/2, -extrudeRectangleWidth/2);
+squareShape.lineTo(-extrudeRectangleLength/2, -extrudeRectangleWidth/2);
+squareShape.lineTo(-extrudeRectangleLength/2, extrudeRectangleWidth/2);
+
 squareShape.closePath();
 
 const trapizoidGeometry = new THREE.ExtrudeGeometry(squareShape, {
     bevelEnabled: false,
-    depth: 2
+    curveSegments: 1,
+    depth: extrudeDepth,
+    steps: 1
 });
+trapizoidGeometry.translate(0, 0, -extrudeDepth/2);
 
-const trapizoidBrush = new Brush(trapizoidGeometry);
-trapizoidBrush.position.z = -1;
-trapizoidBrush.updateMatrixWorld();
+trapizoidGeometry.deleteAttribute("normal");
+trapizoidGeometry.deleteAttribute("uv");
+const cleanGeometry = BufferGeometryUtils.mergeVertices(trapizoidGeometry);
 
-const brush1 = new Brush(new THREE.BoxGeometry(extrudeRectangleLength, extrudeRectangleWidth / Math.sin(angle), 2 * extrudeRectangleWidth * Math.cos(angle)));
-brush1.position.set(0, 0.2, 1);
-brush1.rotateX(-Math.PI / 4);
-brush1.updateMatrixWorld();
+const positionAttribute = cleanGeometry.attributes.position;
+const vertexArray = positionAttribute.array;
 
-const brush2 = new Brush(new THREE.BoxGeometry(0.4, 0.4 * Math.sqrt(2), 0.8 / Math.sqrt(2)));
-brush2.position.set(0, 0.2, -1);
-brush2.rotateX(Math.PI / 4);
-brush2.updateMatrixWorld();
+for (let i = 0; i < vertexArray.length; i += 3) {
+    if (vertexArray[i+1] == -extrudeRectangleWidth/2) continue;
 
-const evaluator = new Evaluator();
-const halfTrapizoid = evaluator.evaluate( trapizoidBrush, brush2, SUBTRACTION );
-const result = evaluator.evaluate(halfTrapizoid, brush1, SUBTRACTION);
+    if (((extrudeRectangleWidth / Math.tan(angle1)) + (extrudeRectangleWidth / Math.tan(angle2))) <= extrudeDepth) {
+        if (vertexArray[i+2] > 0)
+            vertexArray[i+2] -= 2 * vertexArray[i+1] / Math.tan(angle1);
+        else vertexArray[i+2] += 2 * vertexArray[i+1] / Math.tan(angle2);
+    }
+    else {
+        const y = Math.sin(angle1) * Math.cos(angle2) * extrudeDepth * Math.abs(2 * vertexArray[i+1] / extrudeRectangleWidth) / Math.sin(angle1 + angle2);
+        vertexArray[i+2] = -extrudeDepth/2 + y;
+        vertexArray[i+1] = -extrudeRectangleWidth/2 + y * Math.tan(angle2)
+    }
+    
+}
+positionAttribute.needsUpdate = true;
 
-const material = new THREE.MeshBasicMaterial({ color: "#45b324" });
+const material = new THREE.MeshBasicMaterial({ color: "#45b324", wireframe: false });
 const edgeMaterial = new THREE.MeshBasicMaterial({ color: "#ec1313" });
 
-const trapizoidEdgeGeo = new THREE.EdgesGeometry(result.geometry);
+const trapizoidEdgeGeo = new THREE.EdgesGeometry(cleanGeometry);
 const trapizoidLineSegments = new THREE.LineSegments(trapizoidEdgeGeo, edgeMaterial);
 
-const trapizoid = new THREE.Mesh(result.geometry, material);
+const trapizoid = new THREE.Mesh(cleanGeometry, material);
 trapizoid.add(trapizoidLineSegments);
 
-const axesHelper = new THREE.AxesHelper(5);
+const axesHelper = new THREE.AxesHelper(extrudeDepth/2 + 3);
 axesHelper.setColors("red", "yellow", "blue");
 
 scene.add(trapizoid, axesHelper);
