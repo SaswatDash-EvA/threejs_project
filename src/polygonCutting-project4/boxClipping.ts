@@ -10,8 +10,7 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     100,
 );
-camera.position.set(1.8, 0.9, 1.8);
-camera.lookAt(0, 0, 1);
+camera.position.set(2, 0, 1);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.localClippingEnabled = true;
@@ -22,7 +21,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
 
-new OrbitControls(camera, renderer.domElement);
+const control = new OrbitControls(camera, renderer.domElement);
+control.target.set(0, 0, 1);
+control.update();
 
 let extrudeRectangleLength = 0.4, extrudeRectangleWidth = 0.4;
 let angle = Math.PI/4;
@@ -67,7 +68,10 @@ const trapizoidLineSegments = new THREE.LineSegments(trapizoidEdgeGeo, edgeMater
 const trapizoid = new THREE.Mesh(result.geometry, material);
 trapizoid.add(trapizoidLineSegments);
 
-scene.add(trapizoid);
+const axesHelper = new THREE.AxesHelper(5);
+axesHelper.setColors("red", "yellow", "blue");
+
+scene.add(trapizoid, axesHelper);
 
 function animate() {
     renderer.render(scene, camera);
