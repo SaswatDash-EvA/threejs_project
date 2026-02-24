@@ -1,3 +1,8 @@
+:root {
+  --sidebar-width: 240px;
+  --menu-btn-offset: 70px;
+}
+
 body {
 	margin: 0;
 	padding: 0;
@@ -21,13 +26,23 @@ canvas {
 }
 
 .top-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+
 	display: flex;
 	align-items: center;
 	gap: 20px;
-	padding: 10px 20px;
+
+	padding: 10px 20px 10px var(--menu-btn-offset);
+
+	width: 100%;
+
 	background: #3d3d3d;
 	color: white;
 	pointer-events: auto;
+
+	z-index: 15;
 }
 
 .dropdown {
@@ -97,13 +112,13 @@ canvas {
 #info-panel {
 	position: absolute;
 	right: 20px;
-	top: 70px;
+	top: 80px;
 }
 
 #extrude-info {
 	position: absolute;
 	right: 20px;
-	top: 430px;
+	top: 440px;
 }
 
 .profile-card {

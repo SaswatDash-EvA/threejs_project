@@ -1,0 +1,42 @@
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background: #111;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+}
+
+.landing-container {
+	text-align: center;
+}
+
+h1 {
+	font-size: 3rem;
+	margin-bottom: 10px;
+}
+
+.projects-grid {
+	margin-top: 40px;
+	display: grid;
+	grid-template-columns: repeat(2, 260px);
+	gap: 30px;
+	justify-content: center;
+}
+
+.project-card {
+	background: #1e1e1e;
+	padding: 40px 20px;
+	border-radius: 18px;
+	text-decoration: none;
+	color: white;
+	transition: 0.3s;
+	border: 1px solid #444;
+}
+
+.project-card:hover {
+	background: #004fc5;
+	transform: translateY(-6px);
+}

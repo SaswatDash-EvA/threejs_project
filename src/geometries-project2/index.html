@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+	<link rel="stylesheet" href="./ui-styles.css" />
+	<link rel="stylesheet" href="../../sidebar.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>threejs_vanila</title>
+</head>
+
+<body>
+	<div id="menu-btn">☰</div>
+
+	<!-- Sidebar -->
+	<div id="project-sidebar" class="sidebar">
+
+		<h2>Projects</h2>
+
+		<a href="../../index.html">🏠 Landing</a>
+		<a href="../project1/index.html">Project 1</a>
+		<a href="../geometries-project2/index.html">Project 2</a>
+		<a href="../Curves2D-project3/index.html">Project 3</a>
+		<a href="../polygonCutting-project4/index.html">Project 4</a>
+
+	</div>
+
+	<script type="module" src="./style-ui.ts"></script>
+	<div id="ui-overlay">
+		<div class="top-header">
+			<div class="dropdown">
+				<button class="dropbtn">Shapes</button>
+				<div class="dropdown-content" id="shapesDropdown">
+					<a data-index="0">1 - Sphere</a>
+					<a data-index="1">2 - Cube</a>
+					<a data-index="2">3 - Cylinder</a>
+					<a data-index="3">4 - Cone</a>
+					<a data-index="4">5 - Torus</a>
+					<a data-index="5">6 - Capsule</a>
+					<a data-index="6">7 - Pyramid</a>
+					<a data-index="7">8 - Icosahedron</a>
+					<a data-index="8">9 - Extruded Block</a>
+				</div>
+			</div>
+
+			<div class="dropdown">
+				<button class="dropbtn">Materials</button>
+				<div class="dropdown-content" id="materialsDropdown">
+					<a data-index="0">F - Material 1</a>
+					<a data-index="1">S - Material 2</a>
+					<a data-index="2">G - Material 3</a>
+				</div>
+			</div>
+
+			<div class="dropdown">
+				<button class="dropbtn">Lighting</button>
+				<div class="dropdown-content" id="lightingDropdown">
+					<a data-index="0">A - Directional Light</a>
+					<a data-index="1">B - Point Light</a>
+					<a data-index="2">C - Hemispherical Light</a>
+				</div>
+			</div>
+
+			<div class="camera-info">
+				Camera: <span id="cameraType">Perspective</span> (Press L)
+			</div>
+		</div>
+
+		<!-- Right Help Panel -->
+		<div class="right-panel" id="info-panel">
+			<h3>Controls</h3>
+			<p><strong>1-9</strong> → Change Shapes</p>
+			<p><strong>F / S / G</strong> → Change Materials</p>
+			<p><strong>A / B / C</strong> → Toggle Lights</p>
+			<p>
+				<strong>L</strong> → Switch Camera (Orthographic /
+				Perspective)
+			</p>
+			<p><strong>Left click Hold + move</strong> → Rotate camera angle</p>
+			<p><strong>Right click Hold + move</strong> → Move camera</p>
+			<p><strong>Scroll</strong> → Zoom in / Zoom out</p>
+		</div>
+
+		<!-- Extrude shape control panel -->
+		<div class="right-panel" id="extrude-info">
+			<h3>Extrude Shape: Disabled</h3>
+
+		</div>
+
+		<!-- Profile Bottom Left -->
+		<div class="profile-card">
+			<img src="/saswat_image.jpg" alt="Profile" />
+			<div>
+				<div class="name">Saswat Kumar Dash</div>
+				<div class="role">
+					Software Engineer - Configurator Design
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <script type="module" src="./src/style-ui.ts"></script> -->
+	<script>
+		const menuBtn = document.getElementById("menu-btn");
+		const sidebar = document.getElementById("project-sidebar");
+
+		menuBtn.addEventListener("click", () => {
+			sidebar.classList.toggle("open");
+			document.body.classList.toggle("sidebar-open");
+		});
+	</script>
+</body>
+
+</html>
