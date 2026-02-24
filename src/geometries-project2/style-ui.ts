@@ -1,4 +1,4 @@
-import { lightvisibility, meshes, firstStandardMaterial, secondStandardMaterial, glossyStandardMaterial, updateLights, rectangleLength, rectangleWidth, updateRectangleLength, updateRectangleWidth, updateRectangleDepth, updateCircleRadius, updateExtrudedRectangle, rectangleDepth } from "./main";
+import { lightvisibility, meshes, firstStandardMaterial, secondStandardMaterial, glossyStandardMaterial, updateLights, rectangleLength, rectangleWidth, updateRectangleLength, updateRectangleWidth, updateRectangleDepth, updateCircleRadius, updateExtrudedRectangle } from "./main";
 
 export function enableExtrudeGeometry() {
 	const extrudeInfo = document.getElementById("extrude-info") as HTMLDivElement;
