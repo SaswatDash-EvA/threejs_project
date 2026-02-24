@@ -39,6 +39,7 @@ const trapizoidGeometry = new THREE.ExtrudeGeometry(squareShape, {
     bevelEnabled: false,
     depth: 2
 });
+
 const trapizoidBrush = new Brush(trapizoidGeometry);
 trapizoidBrush.position.z = -1;
 trapizoidBrush.updateMatrixWorld();
