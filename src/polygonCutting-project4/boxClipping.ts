@@ -32,54 +32,90 @@ squareShape.moveTo(extrudeRectangleLength/2, extrudeRectangleWidth/2);
 squareShape.lineTo(extrudeRectangleLength/2, -extrudeRectangleWidth/2);
 squareShape.lineTo(-extrudeRectangleLength/2, -extrudeRectangleWidth/2);
 squareShape.lineTo(-extrudeRectangleLength/2, extrudeRectangleWidth/2);
-
 squareShape.closePath();
+
+let extrudeCircleMajorRadius = 0.25;
+const circularShape = new THREE.Shape();
+circularShape.absarc(0, 0, extrudeCircleMajorRadius, 0, 2 * Math.PI);
 
 const trapizoidGeometry = new THREE.ExtrudeGeometry(squareShape, {
     bevelEnabled: false,
     curveSegments: 1,
     depth: extrudeDepth,
-    steps: 1
 });
 trapizoidGeometry.translate(0, 0, -extrudeDepth/2);
 
+const cylinderExtrudeGeometry = new THREE.ExtrudeGeometry(circularShape, {
+    bevelEnabled: false,
+    depth: extrudeDepth,
+    curveSegments: 256
+});
+cylinderExtrudeGeometry.translate(0, 0, -extrudeDepth/2);
+
 trapizoidGeometry.deleteAttribute("normal");
 trapizoidGeometry.deleteAttribute("uv");
-const cleanGeometry = BufferGeometryUtils.mergeVertices(trapizoidGeometry);
+const cleanTrapizoidGeometry = BufferGeometryUtils.mergeVertices(trapizoidGeometry);
 
-const positionAttribute = cleanGeometry.attributes.position;
-const vertexArray = positionAttribute.array;
+cylinderExtrudeGeometry.deleteAttribute("normal");
+cylinderExtrudeGeometry.deleteAttribute("uv");
+const cleanCylinderGeometry = BufferGeometryUtils.mergeVertices(cylinderExtrudeGeometry);
 
-for (let i = 0; i < vertexArray.length; i += 3) {
-    if (vertexArray[i+1] == -extrudeRectangleWidth/2) continue;
+const activeGeometry = cleanCylinderGeometry;
 
-    if (((extrudeRectangleWidth / Math.tan(angle1)) + (extrudeRectangleWidth / Math.tan(angle2))) <= extrudeDepth) {
-        if (vertexArray[i+2] > 0)
-            vertexArray[i+2] -= 2 * vertexArray[i+1] / Math.tan(angle1);
-        else vertexArray[i+2] += 2 * vertexArray[i+1] / Math.tan(angle2);
+function cutPolygon() {
+    if (activeGeometry === cleanTrapizoidGeometry) {
+        const positionAttribute = cleanTrapizoidGeometry.attributes.position;
+        const vertexArray = positionAttribute.array;
+
+        for (let i = 0; i < vertexArray.length; i += 3) {
+            if (vertexArray[i+1] == -extrudeRectangleWidth/2) continue;
+
+            if (((extrudeRectangleWidth / Math.tan(angle1)) + (extrudeRectangleWidth / Math.tan(angle2))) <= extrudeDepth) {
+                if (vertexArray[i+2] > 0)
+                    vertexArray[i+2] -= 2 * vertexArray[i+1] / Math.tan(angle1);
+                else vertexArray[i+2] += 2 * vertexArray[i+1] / Math.tan(angle2);
+            }
+            else {
+                const y = Math.sin(angle1) * Math.cos(angle2) * extrudeDepth * Math.abs(2 * vertexArray[i+1] / extrudeRectangleWidth) / Math.sin(angle1 + angle2);
+                vertexArray[i+2] = -extrudeDepth/2 + y;
+                vertexArray[i+1] = -extrudeRectangleWidth/2 + y * Math.tan(angle2)
+            }
+            
+        }
+        positionAttribute.needsUpdate = true;
     }
     else {
-        const y = Math.sin(angle1) * Math.cos(angle2) * extrudeDepth * Math.abs(2 * vertexArray[i+1] / extrudeRectangleWidth) / Math.sin(angle1 + angle2);
-        vertexArray[i+2] = -extrudeDepth/2 + y;
-        vertexArray[i+1] = -extrudeRectangleWidth/2 + y * Math.tan(angle2)
+        const positionAttribute = cleanCylinderGeometry.attributes.position;
+        const vertexArray = positionAttribute.array;
+
+        for (let i = 0; i < vertexArray.length; i += 3) {
+            if (vertexArray[i+1] == -extrudeCircleMajorRadius) continue;
+
+            if (((2 * extrudeCircleMajorRadius / Math.tan(angle1)) + (2 * extrudeCircleMajorRadius / Math.tan(angle2))) <= extrudeDepth) {
+                if (vertexArray[i+2] > 0)
+                    vertexArray[i+2] -= (vertexArray[i+1] + extrudeCircleMajorRadius) / Math.tan(angle1);
+                else vertexArray[i+2] += (vertexArray[i+1] + extrudeCircleMajorRadius) / Math.tan(angle2);
+            }            
+        }
+        positionAttribute.needsUpdate = true;
     }
-    
 }
-positionAttribute.needsUpdate = true;
+
+cutPolygon();
 
 const material = new THREE.MeshBasicMaterial({ color: "#45b324", wireframe: false });
 const edgeMaterial = new THREE.MeshBasicMaterial({ color: "#ec1313" });
 
-const trapizoidEdgeGeo = new THREE.EdgesGeometry(cleanGeometry);
-const trapizoidLineSegments = new THREE.LineSegments(trapizoidEdgeGeo, edgeMaterial);
+const activeEdgeGeo = new THREE.EdgesGeometry(activeGeometry);
+const activeLineSegments = new THREE.LineSegments(activeEdgeGeo, edgeMaterial);
 
-const trapizoid = new THREE.Mesh(cleanGeometry, material);
-trapizoid.add(trapizoidLineSegments);
+const activeShape = new THREE.Mesh(activeGeometry, material);
+activeShape.add(activeLineSegments);
 
 const axesHelper = new THREE.AxesHelper(extrudeDepth/2 + 3);
 axesHelper.setColors("red", "yellow", "blue");
 
-scene.add(trapizoid, axesHelper);
+scene.add(activeShape, axesHelper);
 
 function animate() {
     renderer.render(scene, camera);
