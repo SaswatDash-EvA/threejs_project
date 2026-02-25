@@ -3,6 +3,16 @@ import { activeGeometry, angle1, angle2, cleanCylinderGeometry, cleanTrapizoidGe
 let cutWidth1 = 0.25, cutHeight1 = 0.25;
 let cutWidth2 = 0.25, cutHeight2 = 0.25;
 
+export function updateCutWidths(W1: number, W2: number) {
+    cutWidth1 = W1;
+    cutWidth2 = W2;
+}
+
+export function updateCutHeights(H1: number, H2: number) {
+    cutHeight1 = H1;
+    cutHeight2 = H2;
+}
+
 export function cutPolygon() {
     const positionAttribute = activeGeometry.attributes.position;
     const vertexArray = positionAttribute.array;
