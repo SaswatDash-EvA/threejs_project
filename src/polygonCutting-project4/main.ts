@@ -11,7 +11,7 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     100,
 );
-camera.position.set(2, 1, 0);
+camera.position.set(0, 1, 3);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.localClippingEnabled = true;

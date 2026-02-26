@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { BufferGeometryUtils } from 'three/examples/jsm/Addons.js';
-import { cutPolygon } from './extrudeShapeCutting';
+import { cutPolygon, updateCutHeights, updateCutWidths } from './extrudeShapeCutting';
 
 export let extrudeRectangleLength = 0.5, extrudeRectangleWidth = 0.5, extrudeDepth = 2;
 export let angle1 = Math.PI/4, angle2 = Math.PI/4;
@@ -39,37 +39,51 @@ cylinderExtrudeGeometry.deleteAttribute("uv");
 export const cleanCylinderGeometry = BufferGeometryUtils.mergeVertices(cylinderExtrudeGeometry);
 
 // Dynamic Rectangle cut with V shape
-export let dynamicSquareWidth = 0.5, dynamicSquareHeight = 0.5;
-const dynamicShape = new THREE.Shape();
-dynamicShape.moveTo(dynamicSquareWidth/2, dynamicSquareWidth/2);
-dynamicShape.lineTo(dynamicSquareWidth/2, 0);
-dynamicShape.lineTo(dynamicSquareWidth/2, -dynamicSquareWidth/2);
-dynamicShape.lineTo(-dynamicSquareWidth/2, -dynamicSquareHeight/2);
-dynamicShape.lineTo(-dynamicSquareHeight/2, 0);
-dynamicShape.lineTo(-dynamicSquareWidth/2, dynamicSquareHeight/2);
+function createSegmentedShape(width: number, height: number, segments: number) {
+    const shape = new THREE.Shape();
+    shape.moveTo(0, 0);
+    for (let i = 1; i <= segments; i++) {
+      shape.lineTo((i / segments) * width, 0);
+    }
+    for (let i = 1; i <= segments; i++) {
+      shape.lineTo(width, (i / segments) * height);
+    }
+    for (let i = segments - 1; i >= 0; i--) {
+      shape.lineTo((i / segments) * width, height);
+    }
+    for (let i = segments - 1; i >= 0; i--) {
+      shape.lineTo(0, (i / segments) * height);
+    }
+    return shape;
+}
+export let dynamicSquareWidth = 2, dynamicSquareHeight = 0.5;
+export const extrudeSegments = 12;
+const dynamicShape = createSegmentedShape(dynamicSquareWidth, dynamicSquareHeight, 8);
 
 const dynamicRectangleGeometry = new THREE.ExtrudeGeometry(dynamicShape, {
     depth: extrudeDepth,
     bevelEnabled: false,
 });
-dynamicRectangleGeometry.translate(0, 0, -extrudeDepth/2);
+dynamicRectangleGeometry.translate(-dynamicSquareWidth/2, -dynamicSquareHeight/2, -extrudeDepth/2);
 
 dynamicRectangleGeometry.deleteAttribute("normal");
 dynamicRectangleGeometry.deleteAttribute("uv");
 export const cleanDynamicGeometry = BufferGeometryUtils.mergeVertices(dynamicRectangleGeometry);
-const indexArray = cleanDynamicGeometry.index;
-if (indexArray) {
-    indexArray.array[20] = 9;
-    indexArray.array[23] = 6;
-    indexArray.array[8] = 5;
-    indexArray.array[11] = 2;
-    indexArray.needsUpdate = true;
-}
+// const indexArray = cleanDynamicGeometry.index;
+// if (indexArray) {
+//     indexArray.array[20] = 9;
+//     indexArray.array[23] = 6;
+//     indexArray.array[8] = 5;
+//     indexArray.array[11] = 2;
+//     indexArray.needsUpdate = true;
+// }
 
-console.log(cleanDynamicGeometry.attributes.position.array);
-console.log(cleanDynamicGeometry.index?.array)
+// console.log(cleanDynamicGeometry.attributes.position.array);
+// console.log(cleanDynamicGeometry.index?.array)
 export let activeGeometry = cleanDynamicGeometry;
 
+updateCutWidths(0.3, 0.3);
+updateCutHeights(0.3, 0.2);
 cutPolygon();
 
 export function updateActiveGeometry(index: number) {

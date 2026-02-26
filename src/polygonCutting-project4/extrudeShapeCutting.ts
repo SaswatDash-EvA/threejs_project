@@ -1,4 +1,4 @@
-import { activeGeometry, angle1, angle2, cleanCylinderGeometry, cleanTrapizoidGeometry, dynamicSquareHeight, extrudeCircleMajorRadius, extrudeDepth, extrudeRectangleWidth } from "./geometries";
+import { activeGeometry, angle1, angle2, cleanCylinderGeometry, cleanTrapizoidGeometry, dynamicSquareHeight, dynamicSquareWidth, extrudeCircleMajorRadius, extrudeDepth, extrudeRectangleWidth, extrudeSegments } from "./geometries";
 
 let cutWidth1 = 0.25, cutHeight1 = 0.25;
 let cutWidth2 = 0.25, cutHeight2 = 0.25;
@@ -48,14 +48,28 @@ export function cutPolygon() {
     else if ((cutWidth1 + cutWidth2) < extrudeDepth) {
         for (let i = 0; i < vertexArray.length; i += 3) {
             if (vertexArray[i+1] == 0) {
-                if (vertexArray[i+2] > 0) vertexArray[i+1] += -dynamicSquareHeight/2 + cutHeight1;
-                else vertexArray[i+1] += -dynamicSquareHeight/2 + cutHeight2;
+                if (vertexArray[i] > 0) vertexArray[i+1] = (-dynamicSquareHeight/2 + cutHeight1);
+                else vertexArray[i+1] = (-dynamicSquareHeight/2 + cutHeight2);
                 continue;
             }
 
-            if (vertexArray[i+2] > 0)
-                vertexArray[i+2] -= cutWidth1;
-            else vertexArray[i+2] += cutWidth2;
+            if (vertexArray[i] > 0) {
+                if (vertexArray[i] === dynamicSquareWidth/2) {
+                    vertexArray[i] -= cutWidth1 * Math.abs(2 * vertexArray[i+1] / dynamicSquareHeight);
+                    if (vertexArray[i+1] > 0) vertexArray[i+1] = (-dynamicSquareHeight/2 + cutHeight1) + 2 * (1 - cutHeight1/dynamicSquareHeight) * vertexArray[i+1];
+                    else vertexArray[i+1] = (-dynamicSquareHeight/2 + cutHeight1) + 2 * (cutHeight1/dynamicSquareHeight) * vertexArray[i+1];
+                }  
+                else vertexArray[i] = ((dynamicSquareWidth - 2*cutWidth1) * vertexArray[i]) / dynamicSquareWidth;
+            }
+            else {
+                if (vertexArray[i] === -dynamicSquareWidth/2) {
+                    vertexArray[i] += cutWidth2 * Math.abs(2 * vertexArray[i+1] / dynamicSquareHeight);
+                    if (vertexArray[i+1] > 0) vertexArray[i+1] = (-dynamicSquareHeight/2 + cutHeight2) + 2 * (1 - cutHeight2/dynamicSquareHeight) * vertexArray[i+1];
+                    else vertexArray[i+1] = (-dynamicSquareHeight/2 + cutHeight2) + 2 * (cutHeight2/dynamicSquareHeight) * vertexArray[i+1];
+                }                    
+                else vertexArray[i] = ((dynamicSquareWidth - 2*cutWidth2) * vertexArray[i]) / dynamicSquareWidth;
+            } 
+            
         }
     }
     positionAttribute.needsUpdate = true;
