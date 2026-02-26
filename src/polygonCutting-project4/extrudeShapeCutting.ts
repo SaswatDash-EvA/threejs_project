@@ -1,4 +1,4 @@
-import { activeGeometry, angle1, angle2, cleanCylinderGeometry, cleanTrapizoidGeometry, dynamicSquareHeight, dynamicSquareWidth, extrudeCircleMajorRadius, extrudeDepth, extrudeRectangleWidth, extrudeSegments } from "./geometries";
+import { activeGeometry, angle1, angle2, cleanCylinderGeometry, cleanTrapizoidGeometry, dynamicSquareHeight, dynamicSquareWidth, extrudeCircleMajorRadius, extrudeDepth, extrudeRectangleWidth } from "./geometries";
 
 let cutWidth1 = 0.25, cutHeight1 = 0.25;
 let cutWidth2 = 0.25, cutHeight2 = 0.25;
