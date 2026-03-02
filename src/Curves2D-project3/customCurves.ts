@@ -30,7 +30,7 @@ const controlPoints: Array<THREE.Vector3> = [
 const splineCurve = new THREE.CatmullRomCurve3(
 	controlPoints,
 	true,
-	"catmullrom",
+	"chordal"
 );
 const numOfDivisions = 240;
 const splineCurvePoints = splineCurve.getPoints(numOfDivisions);
