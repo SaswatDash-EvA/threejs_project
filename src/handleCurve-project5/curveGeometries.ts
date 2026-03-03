@@ -15,7 +15,7 @@ const topSplineControlPoints = [
     new THREE.Vector2(0, leftLegHeight-minBtwWidthNHeight/20),
     new THREE.Vector2(minBtwWidthNHeight/20, leftLegHeight+(minBtwWidthNHeight/20) * topOffset / handleWidth),
     new THREE.Vector2(minBtwWidthNHeight/10, leftLegHeight+(minBtwWidthNHeight/10) * topOffset / handleWidth),
-    new THREE.Vector2(handleWidth/2, leftLegHeight + topOffset/2 + minBtwWidthNHeight/20),
+    new THREE.Vector2(handleWidth/2, leftLegHeight + topOffset/2),
     new THREE.Vector2(handleWidth-minBtwWidthNHeight/5, handleHeight/2),
     new THREE.Vector2(handleWidth-minBtwWidthNHeight/20, handleHeight/2),
     new THREE.Vector2(handleWidth, handleHeight/2 - minBtwWidthNHeight/20),
@@ -69,7 +69,7 @@ export let extrudeHandleGeometry = new THREE.ExtrudeGeometry(shape, {
 const handleEdges = new THREE.EdgesGeometry(extrudeHandleGeometry, 90);
 export let edgeLines = new THREE.LineSegments(handleEdges, edgesMaterial);
 
-export function updateGeometryMesh() {
+export function updateGeometry() {
     extrudeHandleGeometry.dispose();
 
     const topSplineDegree = 3;
@@ -84,7 +84,7 @@ export function updateGeometryMesh() {
         new THREE.Vector2(0, leftLegHeight-minBtwWidthNHeight/20),
         new THREE.Vector2(minBtwWidthNHeight/20, leftLegHeight+(minBtwWidthNHeight/20) * topOffset / handleWidth),
         new THREE.Vector2(minBtwWidthNHeight/10, leftLegHeight+(minBtwWidthNHeight/10) * topOffset / handleWidth),
-        new THREE.Vector2(handleWidth/2, leftLegHeight + topOffset/2 + minBtwWidthNHeight/20),
+        new THREE.Vector2(handleWidth/2, leftLegHeight + topOffset/2),
         new THREE.Vector2(handleWidth-minBtwWidthNHeight/5, handleHeight/2),
         new THREE.Vector2(handleWidth-minBtwWidthNHeight/20, handleHeight/2),
         new THREE.Vector2(handleWidth, handleHeight/2 - minBtwWidthNHeight/20),

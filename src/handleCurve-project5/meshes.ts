@@ -1,6 +1,12 @@
 import * as THREE from 'three';
-import { edgeLines, extrudeHandleGeometry } from './curveGeometries';
+import { edgeLines, extrudeHandleGeometry, updateGeometry } from './curveGeometries';
 import { handleOuterMaterial } from './materials';
 
-export const handle = new THREE.Mesh(extrudeHandleGeometry, handleOuterMaterial);
+export let handle = new THREE.Mesh(extrudeHandleGeometry, handleOuterMaterial);
 handle.add(edgeLines);
+
+export function updateMesh() {
+    updateGeometry();
+    handle = new THREE.Mesh(extrudeHandleGeometry, handleOuterMaterial);
+    handle.add(edgeLines);
+}

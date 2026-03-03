@@ -1,16 +1,16 @@
 import * as THREE from 'three';
-import { handle } from './meshes';
+import { handle, updateMesh } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-import { cameraZ, handleHeight, handleWidth } from './parameters';
+import { cameraZ, handleHeight, handleThickness, handleWidth, updateParameters } from './parameters';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
     60,
 	window.innerWidth / window.innerHeight,
 	0.1,
-	1000
+	3000
 );
-camera.position.set(cameraZ/3, cameraZ/4, cameraZ);
+camera.position.set(cameraZ/3, cameraZ/4, cameraZ + handleThickness);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -21,7 +21,7 @@ const cameraControl = new OrbitControls(camera, renderer.domElement);
 cameraControl.target.set(cameraZ/3, 0, 0);
 cameraControl.update();
 
-const axesHelper = new THREE.AxesHelper(Math.max(handleHeight, handleWidth) + 5);
+let axesHelper = new THREE.AxesHelper(Math.max(handleHeight, handleWidth) + 5);
 axesHelper.setColors("red", "yellow", "blue");
 
 const dirLight = new THREE.DirectionalLight("white", 1);
@@ -43,3 +43,25 @@ function onWindowResize() {
 	camera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+function updateChanges() {
+	scene.remove(handle, axesHelper);
+	const height = parseFloat((document.getElementById("height") as HTMLInputElement).value);
+    const width = parseFloat((document.getElementById("width") as HTMLInputElement).value);
+    const rightLegWidth = parseFloat((document.getElementById("rightLegWidth") as HTMLInputElement).value);
+    const H1 = parseFloat((document.getElementById("H1") as HTMLInputElement).value);
+    const innerHoleDiameter = parseFloat((document.getElementById("innerHoleDiameter") as HTMLInputElement).value);
+	const handleThickness = parseFloat((document.getElementById("handleThickness") as HTMLInputElement).value);
+
+	updateParameters(height, width, rightLegWidth, H1, innerHoleDiameter, handleThickness);
+	updateMesh();
+	camera.position.set(cameraZ/3, cameraZ/4, cameraZ + handleThickness);
+	cameraControl.target.set(cameraZ/3, 0, 0);
+	cameraControl.update();
+
+	axesHelper = new THREE.AxesHelper(Math.max(height/2, width, handleThickness) + 5);
+	axesHelper.setColors("red", "yellow", "blue");
+	scene.add(handle, axesHelper);
+}
+
+(window as any).updateChanges = updateChanges;
