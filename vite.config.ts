@@ -18,7 +18,9 @@ export default defineConfig({
 
 				project4: "src/polygonCutting-project4/index.html",
 
-				project5: "src/handleCurve-project5/index.html"
+				project5: "src/handleCurve-project5/index.html",
+
+				project6: "src/tubeHandle-project6"
 			},
 		},
 	},
