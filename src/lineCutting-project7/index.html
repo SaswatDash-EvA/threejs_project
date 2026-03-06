@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+	<title>Project 7 — Polygon cutting through line</title>
+	<link rel="stylesheet" href="../../sidebar.css" />
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			font-family: Arial, sans-serif;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Menu Button -->
+	<div id="menu-btn">☰</div>
+
+	<!-- Sidebar -->
+	<div id="project-sidebar" class="sidebar">
+
+		<h2>Projects</h2>
+
+		<a href="../..">🏠 Landing</a>
+		<a href="../project1/">Project 1</a>
+		<a href="../geometries-project2/">Project 2</a>
+		<a href="../Curves2D-project3/">Project 3</a>
+		<a href="../polygonCutting-project4/">Project 4</a>
+		<a href="../handleCurve-project5/">Project 5</a>
+		<a href="../tubeHandle-project6/">Project 6</a>
+
+	</div>
+	<script type="module" src="./main.ts"></script>
+	<script>
+		const menuBtn = document.getElementById("menu-btn");
+		const sidebar = document.getElementById("project-sidebar");
+
+		menuBtn.addEventListener("click", () => {
+			sidebar.classList.toggle("open");
+			document.body.classList.toggle("sidebar-open");
+		});
+	</script>
+</body>
+
+</html>

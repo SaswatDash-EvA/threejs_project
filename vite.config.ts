@@ -20,7 +20,9 @@ export default defineConfig({
 
 				project5: "src/handleCurve-project5/index.html",
 
-				project6: "src/tubeHandle-project6/index.html"
+				project6: "src/tubeHandle-project6/index.html",
+
+				project7: "src/lineCutting-project7/index.html"
 			},
 		},
 	},
