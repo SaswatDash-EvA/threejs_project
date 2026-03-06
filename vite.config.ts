@@ -17,7 +17,15 @@ export default defineConfig({
 				project3: "src/Curves2D-project3/index.html",
 
 				project4: "src/polygonCutting-project4/index.html",
+
+				project5: "src/handleCurve-project5/index.html",
+
+				project6: "src/tubeHandle-project6/index.html"
 			},
 		},
+	},
+
+	server: {
+		host: true
 	},
 });
