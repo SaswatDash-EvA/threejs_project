@@ -20,6 +20,8 @@ meshes[0].visible = true;
 const dirLight = new THREE.DirectionalLight("white", 2);
 dirLight.position.set(1, 0.6, 0.2);
 dirLight.castShadow = true;
+dirLight.shadow.mapSize.width = 2048;
+dirLight.shadow.mapSize.height = 2048;
 
 const pointLight = new THREE.PointLight(0xf8f0e3, 1, 0, 1.5);
 pointLight.position.set(0.3, 0.8, 1.2);
