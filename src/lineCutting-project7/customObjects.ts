@@ -9,9 +9,15 @@ export class Line {
     private startPoint: Point | THREE.Vector2;
     private endPoint: Point | THREE.Vector2;
 
+    private slope: number;
+    private yintercept: number;
+
     constructor(p1: Point | THREE.Vector2, p2: Point | THREE.Vector2) {
         this.startPoint = p1;
         this.endPoint = p2;
+
+        this.slope = (p1.y - p2.y) / (p1.x - p2.x);
+        this.yintercept = p2.y - this.slope * p2.x;
     }
 
     getDistance(): number {
@@ -23,6 +29,14 @@ export class Line {
             return new THREE.LineCurve(this.startPoint, this.endPoint);
         else 
             return new THREE.LineCurve(new THREE.Vector2(this.startPoint.x, this.startPoint.y), new THREE.Vector2(this.endPoint.x, this.endPoint.y));
+    }
+
+    getXfromY(coordY: number): number {
+        return (coordY - this.yintercept) / this.slope;
+    }
+
+    getYfromX(coordX: number): number {
+        return this.slope * coordX + this.yintercept;
     }
 }
 
