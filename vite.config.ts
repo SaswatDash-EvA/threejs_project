@@ -24,7 +24,9 @@ export default defineConfig({
 
 				project6: "src/tubeHandle-project6/index.html",
 
-				project7: "src/lineCutting-project7/index.html"
+				project7: "src/lineCutting-project7/index.html",
+
+				project8: "src/parent-childObjects-project8/index.html"
 			},
 		},
 	},
