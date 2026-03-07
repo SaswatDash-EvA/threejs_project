@@ -21,7 +21,7 @@ h1 {
 .projects-grid {
 	margin-top: 40px;
 	display: grid;
-	grid-template-columns: repeat(2, 260px);
+	grid-template-columns: repeat(4, 260px);
 	gap: 30px;
 	justify-content: center;
 }
