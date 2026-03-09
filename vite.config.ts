@@ -26,7 +26,9 @@ export default defineConfig({
 
 				project7: "src/lineCutting-project7/index.html",
 
-				project8: "src/parent-childObjects-project8/index.html"
+				project8: "src/parent-childObjects-project8/index.html",
+
+				project9: "src/raycaster-project9/index.html"
 			},
 		},
 	},
