@@ -1,6 +1,6 @@
 import * as THREE from 'three/webgpu';
 import { plane } from './meshes';
-import { dirLight } from './lights';
+import { dirLight, pointLight } from './lights';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
 const renderer = new THREE.WebGPURenderer({ antialias: true });
@@ -21,7 +21,8 @@ camera.position.z = 15;
 new OrbitControls(camera, renderer.domElement);
 
 scene.background = new THREE.Color("#d8d7cb")
-scene.add(plane, dirLight);
+
+scene.add(plane, dirLight, pointLight);
 
 function animate() {
     renderer.render(scene, camera);
