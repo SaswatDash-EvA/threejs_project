@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+	<title>Project 10 — Window Report</title>
+	<link rel="stylesheet" href="../../sidebar.css" />
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div id="menu-btn">☰</div>
+
+	<!-- Sidebar -->
+	<div id="project-sidebar" class="sidebar">
+
+		<h2>Projects</h2>
+
+		<a href="../..">🏠 Landing</a>
+		<a href="../project1/">Project 1</a>
+		<a href="../geometries-project2/">Project 2</a>
+		<a href="../Curves2D-project3/">Project 3</a>
+		<a href="../polygonCutting-project4/">Project 4</a>
+		<a href="../handleCurve-project5/">Project 5</a>
+		<a href="../tubeHandle-project6/">Project 6</a>
+		<a href="../lineCutting-project7/">Project 7</a>
+		<a href="../parent-childObjects-project8/">Project 8</a>
+		<a href="../raycaster-project9/">Project 9</a>
+        <a href="../project10/">Project 10</a>
+
+	</div>
+
+    <section id="outerframe">
+        <section id="innerframe">
+            <div id="canvas-area">
+                <canvas id="three-canvas"></canvas>
+            </div>
+            <div id="panel-area">
+
+            </div>
+        </section>
+    </section>
+
+	<script type="module" src="./main.ts"></script>
+	<script>
+		const menuBtn = document.getElementById("menu-btn");
+		const sidebar = document.getElementById("project-sidebar");
+
+		menuBtn.addEventListener("click", () => {
+			sidebar.classList.toggle("open");
+			document.body.classList.toggle("sidebar-open");
+		});
+	</script>
+
+</body>
+
+</html>
