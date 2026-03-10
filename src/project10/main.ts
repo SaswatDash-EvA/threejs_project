@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import { beadInsideFrame, cutLineSegments, dashedLineSegments, outerOutsideFrame, outerInsideFrame, boundaryFrame, uiLines, texts, profileOutline, profileInlines } from './meshes';
+import { outerOutsideFrame, boundaryFrame, uiLines, uiTexts, profileOutline, profileInlines, profileCardTexts } from './meshes';
 import { mainCameraFOV, mainCameraPosition, outerFrameHeight, outerFrameWidth } from './geometries';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -29,6 +30,7 @@ const overlayCamera = new THREE.OrthographicCamera(
     1000
 );
 overlayCamera.position.z = 1;
+new OrbitControls(mainCamera, renderer.domElement);
 
 // Setting dimentions of main scene Viewport
 let mainViewportW = 0.65 * outerFrameWidth, mainViewportH = outerFrameHeight;
@@ -49,8 +51,8 @@ uiCamera.updateProjectionMatrix();
 
 // const axesHelper = new THREE.AxesHelper(uiViewportW / 2);
 
-mainScene.add(outerOutsideFrame, outerInsideFrame, beadInsideFrame, cutLineSegments, dashedLineSegments, profileOutline, profileInlines);
-uiScene.add(uiLines, ...texts/*, axesHelper*/);
+mainScene.add(outerOutsideFrame, profileOutline, profileInlines, ...profileCardTexts);
+uiScene.add(uiLines, ...uiTexts/*, axesHelper*/);
 overlayScene.add(boundaryFrame);
 
 function animate() {

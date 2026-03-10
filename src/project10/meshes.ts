@@ -1,5 +1,5 @@
 import { Line2, LineSegments2 } from 'three/examples/jsm/Addons.js';
-import { beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, hardwareDetHeight, heightSegment, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainSceneUILinesGeometry, outerFrameGeometry, outerInsideGeometry, profileInlineGeometry, profileOutlineGeometry, textSize, topTextGeometry, uiHeight, uiwidth } from './geometries';
+import { beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, designationResTextGeometry, designationTextGeometry, empIdResTextGeometry, empIdTextGeometry, hardwareDetHeight, heightSegment, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainFrameHeight, mainFrameWidth, mainSceneUILinesGeometry, nameTextGeometry, outerFrameGeometry, outerInsideGeometry, profileHeightSegments, profileInlineGeometry, profileLength, profileOffset, profileOutlineGeometry, textSize, topTextGeometry, uiHeight, uiwidth } from './geometries';
 import { boundaryMaterial, dashedDividerMaterial, textMaterial, uiLinesMaterial, windowMaterial } from './materials';
 import { Mesh } from 'three';
 
@@ -34,15 +34,33 @@ lvl8Text.position.set(-uiwidth/2 + textLeftOffset, uiHeight/2 - 6*heightSegment 
 lvl9Text.position.set(-uiwidth/2 + textLeftOffset, uiHeight/2 - 6*heightSegment - hardwareDetHeight - lowerHeightSegments - lowerHeightSegments/2 - textSize/2, 0);
 lvl10Text.position.set(-uiwidth/2 + textLeftOffset, uiHeight/2 - 6*heightSegment - hardwareDetHeight - 2*lowerHeightSegments - lowerHeightSegments/2 - textSize/2, 0);
 
-export const texts = [topText, lvl2LeftText, lvl2RightText, lvl3Text, lvl4Text, lvl6Text, lvl7Text, lvl7RightText, lvl8Text, lvl9Text, lvl10Text];
+export const uiTexts = [topText, lvl2LeftText, lvl2RightText, lvl3Text, lvl4Text, lvl6Text, lvl7Text, lvl7RightText, lvl8Text, lvl9Text, lvl10Text];
+
+// Profile card texts
+const nameText = new Mesh(nameTextGeometry, textMaterial);
+const empIdText = new Mesh(empIdTextGeometry, textMaterial);
+const empIdResText = new Mesh(empIdResTextGeometry, textMaterial);
+const designationText = new Mesh(designationTextGeometry, textMaterial);
+const designationResText = new Mesh(designationResTextGeometry, textMaterial);
+
+nameText.position.set(-mainFrameWidth/2 + profileOffset + profileLength/2, mainFrameHeight/2 - profileOffset - profileHeightSegments/2, 0);
+empIdText.position.set(-mainFrameWidth/2 + profileOffset + profileLength/2, mainFrameHeight/2 - profileOffset - profileHeightSegments - profileHeightSegments/4, 0);
+empIdResText.position.set(-mainFrameWidth/2 + profileOffset + profileLength/2, mainFrameHeight/2 - profileOffset - profileHeightSegments - 3*profileHeightSegments/5, 0);
+designationText.position.set(-mainFrameWidth/2 + profileOffset + profileLength/2, mainFrameHeight/2 - profileOffset - 2*profileHeightSegments - profileHeightSegments/6, 0);
+designationResText.position.set(-mainFrameWidth/2 + profileOffset + profileLength/2, mainFrameHeight/2 - profileOffset - 2*profileHeightSegments - 3*profileHeightSegments/5, 0);
+
+export const profileCardTexts = [nameText, empIdText, empIdResText, designationText, designationResText];
 
 export const outerOutsideFrame = new Line2(outerFrameGeometry, windowMaterial);
-export const outerInsideFrame = new Line2(outerInsideGeometry, windowMaterial);
-export const beadInsideFrame = new Line2(beadInsideGeometry, windowMaterial);
+const outerInsideFrame = new Line2(outerInsideGeometry, windowMaterial);
+const beadInsideFrame = new Line2(beadInsideGeometry, windowMaterial);
 
-export const cutLineSegments = new LineSegments2(cutSegmentsGeometry, windowMaterial);
-export const dashedLineSegments = new LineSegments2(dashedLineSegmentGeometry, dashedDividerMaterial);
+const cutLineSegments = new LineSegments2(cutSegmentsGeometry, windowMaterial);
+const dashedLineSegments = new LineSegments2(dashedLineSegmentGeometry, dashedDividerMaterial);
 dashedLineSegments.computeLineDistances();
+
+outerOutsideFrame.add(outerInsideFrame, beadInsideFrame, cutLineSegments, dashedLineSegments);
+outerOutsideFrame.translateY(0.2);
 
 // Profile UI
 export const profileOutline = new Line2(profileOutlineGeometry, uiLinesMaterial);

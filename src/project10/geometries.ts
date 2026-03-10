@@ -105,7 +105,7 @@ export const topTextGeometry = new TextGeometry("Design Name:-", midTextParamete
 
 // Main scene dimensions
 export let mainCameraPosition = 2, mainCameraFOV = (Math.PI / 180) * 75;
-let mainFrameHeight = 2 * mainCameraPosition * Math.tan(mainCameraFOV / 2), mainFrameWidth = mainFrameHeight * 0.65 * outerFrameWidth / outerFrameHeight;
+export let mainFrameHeight = 2 * mainCameraPosition * Math.tan(mainCameraFOV / 2), mainFrameWidth = mainFrameHeight * 0.65 * outerFrameWidth / outerFrameHeight;
 
 // Window geometries
 export let cornerCoordinates = [0.5, 0.9];
@@ -149,8 +149,7 @@ const dashedLinesSegmentPoints = [
 export const dashedLineSegmentGeometry = new LineSegmentsGeometry().setPositions(dashedLinesSegmentPoints);
 
 // Profile UI on the main screen
-let profileOffset = 0.1, profileLength = 1, profileHeight = 1;
-let profileBorderRadius = 0.15;
+export let profileOffset = 0.1, profileLength = 1, profileHeight = 1, profileBorderRadius = 0.15;
 
 const profileUIPath = new THREE.Path();
 profileUIPath.moveTo(-mainFrameWidth / 2 + profileOffset, mainFrameHeight / 2 - profileOffset - profileBorderRadius);
@@ -168,7 +167,7 @@ const profileOutlinePoints = profileUIPath.getPoints(240);
 export const profileOutlineGeometry = new LineGeometry().setFromPoints(profileOutlinePoints);
 
 // Profile inner divider lines
-let profileHeightSegments = profileHeight / 4;
+export let profileHeightSegments = profileHeight / 4;
 let profileUIVertices: Array<number> = [];
 for (let i = 1; i < 4; i++) {
     profileUIVertices.push(
@@ -191,7 +190,7 @@ for (let i = 0; i < 12; i++)
 export const profileInlineGeometry = lineSegmentPositions(profileUIVertices, profileUIIndices);
 
 // Profile texts
-export const profileTextSize = profileHeightSegments / 7, profileLargeTextSize = profileHeightSegments / 4;
+export const profileTextSize = profileHeightSegments / 6, profileLargeTextSize = profileHeightSegments / 5;
 const profileTextParameters: TextGeometryParameters = {
     font: font,
     size: profileTextSize,
@@ -200,11 +199,12 @@ const profileTextParameters: TextGeometryParameters = {
 };
 const profileLargeTextParameters: TextGeometryParameters = {
     font: font,
-    size: profileTextSize,
+    size: profileLargeTextSize,
     depth: profileTextSize * 0.02,
     curveSegments: 30
 };
-export const nameTextGeometry = new TextGeometry("Saswat Kumar Dash", profileTextParameters);
-export const empIdTextGeometry = new TextGeometry("Employee Id:-", profileTextParameters);
-export const empIdResTextGeometry = new TextGeometry("EvA/280", profileLargeTextParameters);
-export const designationTextGeometry = new TextGeometry("Designation:-", midTextParameters);
+export const nameTextGeometry = new TextGeometry("Saswat Kumar Dash", profileTextParameters).center();
+export const empIdTextGeometry = new TextGeometry("Employee Id:-", profileTextParameters).center();
+export const empIdResTextGeometry = new TextGeometry("EvA/280", profileLargeTextParameters).center();
+export const designationTextGeometry = new TextGeometry("Designation:-", profileTextParameters).center();
+export const designationResTextGeometry = new TextGeometry("Software Engineer - Design\n Configurator", profileLargeTextParameters).center();
