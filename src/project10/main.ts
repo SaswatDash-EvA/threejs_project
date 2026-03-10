@@ -1,29 +1,82 @@
 import * as THREE from 'three';
-import { beadInsideFrame, cutLineSegments, dashedLineSegments, outerBoundaryFrame, outerInsideFrame } from './meshes';
+import { beadInsideFrame, cutLineSegments, dashedLineSegments, outerOutsideFrame, outerInsideFrame, boundaryFrame, uiLines, texts, profileOutline, profileInlines } from './meshes';
+import { mainCameraFOV, mainCameraPosition, outerFrameHeight, outerFrameWidth } from './geometries';
 
-const canvas = document.getElementById("three-canvas") as HTMLCanvasElement;
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight, false);
 renderer.setAnimationLoop(animate);
+document.body.appendChild(renderer.domElement);
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color("white");
+const mainScene = new THREE.Scene();
+mainScene.background = new THREE.Color("#f5f5f5");
+const uiScene = new THREE.Scene();
+uiScene.background = new THREE.Color("#f5f5f5");
+const overlayScene = new THREE.Scene();
+overlayScene.background = new THREE.Color("#f5f5f5");
 
-let aspect = canvas.clientWidth / canvas.clientHeight;
-const camera = new THREE.OrthographicCamera(-aspect, aspect);
-camera.position.z = 2;
+const mainCamera = new THREE.PerspectiveCamera(mainCameraFOV * 180 / Math.PI, 1, 0.1, 1000);
+mainCamera.position.z = mainCameraPosition;
 
-scene.add(outerBoundaryFrame, outerInsideFrame, beadInsideFrame, cutLineSegments, dashedLineSegments);
+let uiCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000);
+uiCamera.position.z = 1;
+
+const overlayCamera = new THREE.OrthographicCamera(
+    -window.innerWidth / 2,
+    window.innerWidth / 2,
+    window.innerHeight / 2,
+    -window.innerHeight / 2,
+    0.1,
+    1000
+);
+overlayCamera.position.z = 1;
+
+// Setting dimentions of main scene Viewport
+let mainViewportW = 0.65 * outerFrameWidth, mainViewportH = outerFrameHeight;
+let mainViewportX = (window.innerWidth - outerFrameWidth) / 2, mainViewportY = (window.innerHeight - outerFrameHeight) / 2;
+
+// Setting dimentions of UI scene viewport
+let uiViewportW = 0.35 * outerFrameWidth, uiViewportH = outerFrameHeight;
+let uiViewportX = (window.innerWidth - outerFrameWidth) / 2 + mainViewportW, uiViewportY = (window.innerHeight - outerFrameHeight) / 2;
+
+mainCamera.aspect = mainViewportW / mainViewportH;
+mainCamera.updateProjectionMatrix();
+
+uiCamera.left = -uiViewportW / 2;
+uiCamera.right = uiViewportW / 2;
+uiCamera.top = uiViewportH / 2;
+uiCamera.bottom = -uiViewportH / 2;
+uiCamera.updateProjectionMatrix();
+
+// const axesHelper = new THREE.AxesHelper(uiViewportW / 2);
+
+mainScene.add(outerOutsideFrame, outerInsideFrame, beadInsideFrame, cutLineSegments, dashedLineSegments, profileOutline, profileInlines);
+uiScene.add(uiLines, ...texts/*, axesHelper*/);
+overlayScene.add(boundaryFrame);
 
 function animate() {
-    renderer.render(scene, camera);
+    renderer.setScissorTest(false);
+    renderer.clear(true, true, true);
+
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    renderer.setScissorTest(false);
+    renderer.render(overlayScene, overlayCamera);
+
+    // Render main scene
+    renderer.setViewport(mainViewportX, mainViewportY, mainViewportW, mainViewportH);
+    renderer.setScissor(mainViewportX, mainViewportY, mainViewportW, mainViewportH);
+    renderer.setScissorTest(true);
+    renderer.render(mainScene, mainCamera);
+
+    // Render UI
+    renderer.setViewport(uiViewportX, uiViewportY, uiViewportW, uiViewportH);
+    renderer.setScissor(uiViewportX, uiViewportY, uiViewportW, uiViewportH);
+    renderer.setScissorTest(true);
+    renderer.render(uiScene, uiCamera);
+
 }
 
 window.addEventListener("resize", onWindowResize);
 function onWindowResize() {
-    aspect = canvas.clientWidth / canvas.clientHeight;
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-    camera.left = -aspect;
-    camera.right = aspect;
-    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight, false);
+    mainCamera.updateProjectionMatrix();
 }
