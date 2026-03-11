@@ -30,7 +30,9 @@ export default defineConfig({
 
 				project9: "src/raycaster-project9/index.html",
 
-				project10: "src/project10/index.html"
+				project10: "src/project10/index.html",
+
+				project11: "src/project11/index.html"
 			},
 		},
 	},
