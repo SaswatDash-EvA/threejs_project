@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { FontLoader, LineGeometry, LineSegmentsGeometry, TextGeometry, type TextGeometryParameters } from 'three/examples/jsm/Addons.js';
 import helvetikerFont from 'three/examples/fonts/helvetiker_bold.typeface.json';
+import { createHexagon, createStarShape, createUpwardArrow } from './shapes';
 
 // Frame borders geometry
 export let outerFrameWidth = 0.75 * window.innerWidth, outerFrameHeight = 0.75 * window.innerHeight;
@@ -203,8 +204,14 @@ const profileLargeTextParameters: TextGeometryParameters = {
     depth: profileTextSize * 0.02,
     curveSegments: 30
 };
-export const nameTextGeometry = new TextGeometry("Saswat Kumar Dash", profileTextParameters).center();
+export const nameTextGeometry = new TextGeometry("Saswat Kumar Dash", profileLargeTextParameters).center();
 export const empIdTextGeometry = new TextGeometry("Employee Id:-", profileTextParameters).center();
 export const empIdResTextGeometry = new TextGeometry("EvA/280", profileLargeTextParameters).center();
 export const designationTextGeometry = new TextGeometry("Designation:-", profileTextParameters).center();
 export const designationResTextGeometry = new TextGeometry("Software Engineer - Design\n Configurator", profileLargeTextParameters).center();
+
+// Shapes at the bottom of main scene
+let shapesAreaLength = 0.8 * mainFrameWidth, shapesAreaWidth = 0.2 * shapesAreaLength;
+export const hexagonGeometry = createHexagon(-shapesAreaLength/2 + shapesAreaLength/10, -mainFrameHeight/2 + shapesAreaWidth/2, 0.4 * shapesAreaWidth);
+export const starGeometry = createStarShape(-shapesAreaLength/2 + 3*shapesAreaLength/10, -mainFrameHeight/2 + shapesAreaWidth/10, (shapesAreaWidth/5) / Math.sin(Math.PI/3));
+export const upwardArroeGeometry = createUpwardArrow(0, -mainFrameHeight/2 + shapesAreaWidth/10, 4*shapesAreaWidth/5);

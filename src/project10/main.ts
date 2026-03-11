@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { outerOutsideFrame, boundaryFrame, uiLines, uiTexts, profileOutline, profileInlines, profileCardTexts } from './meshes';
+import { outerOutsideFrame, boundaryFrame, uiLines, uiTexts, profileOutline, profileInlines, profileCardTexts, bottomMainPanelShapes } from './meshes';
 import { mainCameraFOV, mainCameraPosition, outerFrameHeight, outerFrameWidth } from './geometries';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
@@ -51,7 +51,7 @@ uiCamera.updateProjectionMatrix();
 
 // const axesHelper = new THREE.AxesHelper(uiViewportW / 2);
 
-mainScene.add(outerOutsideFrame, profileOutline, profileInlines, ...profileCardTexts);
+mainScene.add(outerOutsideFrame, profileOutline, profileInlines, ...profileCardTexts, ...bottomMainPanelShapes);
 uiScene.add(uiLines, ...uiTexts/*, axesHelper*/);
 overlayScene.add(boundaryFrame);
 

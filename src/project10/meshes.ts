@@ -1,5 +1,5 @@
 import { Line2, LineSegments2 } from 'three/examples/jsm/Addons.js';
-import { beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, designationResTextGeometry, designationTextGeometry, empIdResTextGeometry, empIdTextGeometry, hardwareDetHeight, heightSegment, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainFrameHeight, mainFrameWidth, mainSceneUILinesGeometry, nameTextGeometry, outerFrameGeometry, outerInsideGeometry, profileHeightSegments, profileInlineGeometry, profileLength, profileOffset, profileOutlineGeometry, textSize, topTextGeometry, uiHeight, uiwidth } from './geometries';
+import { beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, designationResTextGeometry, designationTextGeometry, empIdResTextGeometry, empIdTextGeometry, hardwareDetHeight, heightSegment, hexagonGeometry, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainFrameHeight, mainFrameWidth, mainSceneUILinesGeometry, nameTextGeometry, outerFrameGeometry, outerInsideGeometry, profileHeightSegments, profileInlineGeometry, profileLength, profileOffset, profileOutlineGeometry, starGeometry, textSize, topTextGeometry, uiHeight, uiwidth, upwardArroeGeometry } from './geometries';
 import { boundaryMaterial, dashedDividerMaterial, textMaterial, uiLinesMaterial, windowMaterial } from './materials';
 import { Mesh } from 'three';
 
@@ -65,3 +65,10 @@ outerOutsideFrame.translateY(0.2);
 // Profile UI
 export const profileOutline = new Line2(profileOutlineGeometry, uiLinesMaterial);
 export const profileInlines = new LineSegments2(profileInlineGeometry, uiLinesMaterial);
+
+// Shapes at the bottom of main scene
+const hexagon = new Line2(hexagonGeometry, uiLinesMaterial);
+const star = new Line2(starGeometry, uiLinesMaterial);
+const upwardArrow = new Line2(upwardArroeGeometry, uiLinesMaterial);
+
+export const bottomMainPanelShapes: Array<Line2> = [hexagon, star, upwardArrow];
