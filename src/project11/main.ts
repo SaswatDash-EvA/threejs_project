@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { windowHeight, windowWidth } from './dynamicVariables';
 import { beads, windowFrames } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import { highlightMeshes } from './raycaster';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -14,6 +15,9 @@ scene.background = new THREE.Color("#f0f0f0");
 const camera = new THREE.OrthographicCamera();
 camera.position.z = Math.max(windowWidth, windowHeight);
 let aspect = window.innerWidth / window.innerHeight;
+
+// Ray caster to select window profiles
+const rayCaster = new THREE.Raycaster();
 
 function updateScene(frustumHeight: number) {
     aspect = window.innerWidth / window.innerHeight;
@@ -43,6 +47,11 @@ window.addEventListener("resize", () => {
     updateScene(Math.max(windowHeight * 1.8, windowWidth * 1.8));
 });
 
-// window.addEventListener("click", (event: PointerEvent) => {
-     
-// });
+window.addEventListener("click", (event: PointerEvent) => {
+    const mouseCoordX = 2 * event.clientX / window.innerWidth - 1;
+    const mouseCoordY = 1 - 2 * event.clientY / window.innerHeight;
+
+    rayCaster.setFromCamera(new THREE.Vector2(mouseCoordX, mouseCoordY), camera);
+    if (highlightMeshes(rayCaster)) 
+        console.log(mouseCoordX, mouseCoordY);
+});
