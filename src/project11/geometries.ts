@@ -15,26 +15,22 @@ const frameShape = new THREE.Shape([
 ]);
 
 const beadShape = new THREE.Shape();
-beadShape.moveTo(0, 0)
-    .lineTo(0, beadH - beadW)
+beadShape.moveTo(-frameW, frameH1)
+    .lineTo(-frameW, beadH - beadW + frameH1)
     .arc(beadW, 0, beadW, Math.PI, Math.PI/2, true)
-    .lineTo(beadW, beadH - beadThickness)
+    .lineTo(beadW - frameW, beadH - beadThickness + frameH1)
     .arc(0, -beadW + beadThickness, beadW - beadThickness, Math.PI/2, Math.PI)
-    .lineTo(beadThickness, 0)
-    .lineTo(0, 0);
+    .lineTo(beadThickness - frameW, 0 + frameH1)
+    .lineTo(-frameW, frameH1);
 
 // Step-2: Create a rectangle path to extrude
+const topLeft = new THREE.Vector3(-windowWidth/2, windowHeight/2), topRight = new THREE.Vector3(windowWidth/2, windowHeight/2);
+const bottomLeft = new THREE.Vector3(-windowWidth/2, -windowHeight/2), bottomRight = new THREE.Vector3(windowWidth/2, -windowHeight/2);
 const windowBorderLines = [
-    new THREE.LineCurve3(new THREE.Vector3(-windowWidth/2, -windowHeight/2), new THREE.Vector3(windowWidth/2, -windowHeight/2)), // Bottom
-    new THREE.LineCurve3(new THREE.Vector3(windowWidth/2, -windowHeight/2), new THREE.Vector3(windowWidth/2, windowHeight/2)), // Right
-    new THREE.LineCurve3(new THREE.Vector3(windowWidth/2, windowHeight/2), new THREE.Vector3(-windowWidth/2, windowHeight/2)), // Top
-    new THREE.LineCurve3(new THREE.Vector3(-windowWidth/2, windowHeight/2), new THREE.Vector3(-windowWidth/2, -windowHeight/2)), // Left
-];
-const beadBorderLines = [
-    new THREE.LineCurve3(new THREE.Vector3(-windowWidth/2 + frameH1, -windowHeight/2 + frameH1, frameW), new THREE.Vector3(windowWidth/2 - frameH1, -windowHeight/2 + frameH1, frameW)), // Bottom
-    new THREE.LineCurve3(new THREE.Vector3(windowWidth/2 - frameH1, -windowHeight/2 + frameH1, frameW), new THREE.Vector3(windowWidth/2 - frameH1, windowHeight/2 - frameH1, frameW)), // Right
-    new THREE.LineCurve3(new THREE.Vector3(windowWidth/2 - frameH1, windowHeight/2 - frameH1, frameW), new THREE.Vector3(-windowWidth/2 + frameH1, windowHeight/2 - frameH1, frameW)), // Top
-    new THREE.LineCurve3(new THREE.Vector3(-windowWidth/2 + frameH1, windowHeight/2 - frameH1, frameW), new THREE.Vector3(-windowWidth/2 + frameH1, -windowHeight/2 + frameH1, frameW)), // Left
+    new THREE.LineCurve3(bottomLeft, bottomRight), // Bottom
+    new THREE.LineCurve3(bottomRight, topRight), // Right
+    new THREE.LineCurve3(topRight, topLeft), // Top
+    new THREE.LineCurve3(topLeft, bottomLeft), // Left
 ];
 
 // Step-3: extrude along the rectangle
@@ -45,19 +41,20 @@ export const frameGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.m
     const geometry =  new THREE.ExtrudeGeometry(frameShape, {
         extrudePath,
         bevelEnabled: false, 
-        steps: 10
+        steps: 1
     });
     cutBy45135(geometry, index + 1);
+    console.log(geometry);    
     return geometry;
 });
 
-export const beadGeometries: Array<THREE.ExtrudeGeometry> = beadBorderLines.map<THREE.ExtrudeGeometry>((line, index) => {
+export const beadGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.map<THREE.ExtrudeGeometry>((line, index) => {
     const extrudePath = new THREE.CurvePath<THREE.Vector3>();
     extrudePath.add(line);
     const geometry =  new THREE.ExtrudeGeometry(beadShape, {
         extrudePath,
         bevelEnabled: false, 
-        steps: 10
+        steps: 1
     });
     heightMajor90Cut(geometry, index + 1);
     return geometry;

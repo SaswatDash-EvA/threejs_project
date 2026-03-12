@@ -1,22 +1,32 @@
 import * as THREE from 'three';
 import { beads, windowFrames } from './meshes';
-import { defaultColor, highlightColor } from './dynamicVariables';
+import { defaultColor, highlightColor, subHighlightColor } from './dynamicVariables';
 
 // To check if frame and beads are highlighted (default: false)
 let frameHighlighted = false, beadHighlighted = false;
 
-function setFrameColor(hex: string) {
+function setFrameColor(intersectedFrame: THREE.Mesh | undefined, primaryHex: string, clickedHex?: string) {
     windowFrames.forEach(mesh => {
         const material = mesh.material as THREE.MeshBasicMaterial;
-        material.color.set(hex);
+        if (intersectedFrame === mesh && clickedHex) {
+            material.color.set(clickedHex);
+            material.needsUpdate = true;
+            return;
+        }
+        material.color.set(primaryHex);
         material.needsUpdate = true;
     });
 }
 
-function setBeadColor(hex: string) {
+function setBeadColor(intersectedBead: THREE.Mesh | undefined, primaryHex: string, clickedHex?: string) {
     beads.forEach(mesh => {
         const material = mesh.material as THREE.MeshBasicMaterial;
-        material.color.set(hex);
+        if (intersectedBead === mesh && clickedHex) {
+            material.color.set(clickedHex);
+            material.needsUpdate = true;
+            return;
+        }     
+        material.color.set(primaryHex);
         material.needsUpdate = true;
     });
 }
@@ -25,30 +35,34 @@ export function highlightMeshes(rayCaster: THREE.Raycaster): boolean {
     const intersectedObjects = rayCaster.intersectObjects([...windowFrames, ...beads]);
 
     if (intersectedObjects.length === 0) {
-        if (frameHighlighted)
-            setFrameColor(defaultColor);
-        else if (beadHighlighted)
-            setBeadColor(defaultColor);
-        frameHighlighted = false, beadHighlighted = false;
+        removeHighlights();
         return false;
     }
-        
 
-    if (windowFrames.some(mesh => mesh.name == intersectedObjects[0].object.name)) {
+    let intersectedframe: THREE.Mesh | undefined;
+    let intersectedBead: THREE.Mesh | undefined;
+    if (intersectedframe = windowFrames.find(mesh => mesh == intersectedObjects[0].object)) {
         if (frameHighlighted) return true;
-        setFrameColor(highlightColor);
+        setFrameColor(intersectedframe, subHighlightColor, highlightColor);
         if (beadHighlighted)
-            setBeadColor(defaultColor);
+            setBeadColor(intersectedBead, defaultColor);
         frameHighlighted = true, beadHighlighted = false;
     }
-    else if (beads.some(mesh => mesh.name == intersectedObjects[0].object.name)) {
+    else if (intersectedBead = beads.find(mesh => mesh == intersectedObjects[0].object)) {
         if (beadHighlighted) return true;
-        setBeadColor(highlightColor);
+        setBeadColor(intersectedBead, subHighlightColor, highlightColor);
         if (frameHighlighted)
-            setFrameColor(defaultColor);
+            setFrameColor(intersectedframe, defaultColor);
 
         frameHighlighted = false, beadHighlighted = true;
     }
-    console.log(frameHighlighted, beadHighlighted);
     return true;
+}
+
+export function removeHighlights() {
+    if (frameHighlighted)
+        setFrameColor(undefined, defaultColor);
+    else if (beadHighlighted)
+        setBeadColor(undefined, defaultColor);
+    frameHighlighted = false, beadHighlighted = false;
 }

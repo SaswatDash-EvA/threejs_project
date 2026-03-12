@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { windowHeight, windowWidth } from './dynamicVariables';
-import { beads, windowFrames } from './meshes';
+import { windowFrames } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-import { highlightMeshes } from './raycaster';
+import { highlightMeshes, removeHighlights } from './raycaster';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -33,10 +33,9 @@ function updateScene(frustumHeight: number) {
 
 updateScene(Math.max(windowWidth / aspect, windowHeight) * 1.5);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableRotate = false;
+new OrbitControls(camera, renderer.domElement);
 
-scene.add(...windowFrames, ...beads);
+scene.add(...windowFrames);
 
 function animate() {
     renderer.render(scene, camera);
@@ -47,11 +46,35 @@ window.addEventListener("resize", () => {
     updateScene(Math.max(windowHeight * 1.8, windowWidth * 1.8));
 });
 
-window.addEventListener("click", (event: PointerEvent) => {
+window.addEventListener("dblclick", (event: MouseEvent) => {
     const mouseCoordX = 2 * event.clientX / window.innerWidth - 1;
     const mouseCoordY = 1 - 2 * event.clientY / window.innerHeight;
 
     rayCaster.setFromCamera(new THREE.Vector2(mouseCoordX, mouseCoordY), camera);
     if (highlightMeshes(rayCaster)) 
         console.log(mouseCoordX, mouseCoordY);
+});
+
+// Remove the highlights by single click and avoid removal for click and drag
+let isDragging = false;
+window.addEventListener("mousedown", () => {
+    window.addEventListener("mousemove", onMouseMove);
+})
+
+function onMouseMove(event: MouseEvent) {
+    if (event.buttons === 0) return;
+    isDragging = true;
+}
+
+window.addEventListener("mouseup", () => {
+    if (isDragging) {
+        window.removeEventListener("mousemove", onMouseMove);
+        isDragging = false;
+        return;
+    }
+    removeHighlights();
+});
+
+window.addEventListener("dragstart", (event: DragEvent) =>{
+    event.preventDefault();
 });

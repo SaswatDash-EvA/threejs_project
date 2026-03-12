@@ -43,5 +43,7 @@ export function cutBy45135(geometry: THREE.ExtrudeGeometry, index: number) {
  */
 export function heightMajor90Cut(geometry: THREE.ExtrudeGeometry, index: number) {
     if (index == 1 || index == 3)
-        geometry.scale((windowWidth - 2*(frameH1 + beadH)) / (windowWidth - 2*frameH1), 1, 1);
+        geometry.scale((windowWidth - 2*(frameH1 + beadH)) / (windowWidth), 1, 1);
+    else if (index == 2 || index == 4)
+        geometry.scale(1, (windowHeight - 2*frameH1) / (windowHeight), 1);
 }
