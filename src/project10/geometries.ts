@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { FontLoader, LineGeometry, LineSegmentsGeometry, TextGeometry, type TextGeometryParameters } from 'three/examples/jsm/Addons.js';
 import helvetikerFont from 'three/examples/fonts/helvetiker_bold.typeface.json';
-import { createHexagon, createStarShape, createUpwardArrow } from './shapes';
+import { createHexagon, createLeftArrow, createRightArrow, createStarShape, createUpwardArrow } from './shapes';
 
 // Frame borders geometry
 export let outerFrameWidth = 0.75 * window.innerWidth, outerFrameHeight = 0.75 * window.innerHeight;
@@ -211,7 +211,27 @@ export const designationTextGeometry = new TextGeometry("Designation:-", profile
 export const designationResTextGeometry = new TextGeometry("Software Engineer - Design\n Configurator", profileLargeTextParameters).center();
 
 // Shapes at the bottom of main scene
-let shapesAreaLength = 0.8 * mainFrameWidth, shapesAreaWidth = 0.2 * shapesAreaLength;
+let shapesAreaLength = mainFrameWidth, shapesAreaWidth = 0.15 * shapesAreaLength;
 export const hexagonGeometry = createHexagon(-shapesAreaLength/2 + shapesAreaLength/10, -mainFrameHeight/2 + shapesAreaWidth/2, 0.4 * shapesAreaWidth);
 export const starGeometry = createStarShape(-shapesAreaLength/2 + 3*shapesAreaLength/10, -mainFrameHeight/2 + shapesAreaWidth/10, (shapesAreaWidth/5) / Math.sin(Math.PI/3));
 export const upwardArroeGeometry = createUpwardArrow(0, -mainFrameHeight/2 + shapesAreaWidth/10, 4*shapesAreaWidth/5);
+export const leftArrowGeometry = createLeftArrow(shapesAreaLength/10 + shapesAreaLength/25, -mainFrameHeight/2 + shapesAreaWidth/2, 3 * shapesAreaLength/25, 3 * shapesAreaWidth/5);
+export const rightArrowGeometry = createRightArrow(shapesAreaLength/2 - shapesAreaLength/25, -mainFrameHeight/2 + shapesAreaWidth/2, 3 * shapesAreaLength/25, 3 * shapesAreaWidth/5);
+
+// Bottom Shapes Outlines
+let shapesUIVertices: Array<number> = [];
+shapesUIVertices.push(
+    -shapesAreaLength/2, -mainFrameHeight/2 + shapesAreaWidth, 0, shapesAreaLength/2, -mainFrameHeight/2 + shapesAreaWidth, 0,
+    -shapesAreaLength/2, -mainFrameHeight/2, 0, shapesAreaLength/2, -mainFrameHeight/2, 0
+);
+for (let i = 0; i < 8; i++) {
+    shapesUIVertices.push(
+        -shapesAreaLength/2 + i*shapesAreaLength/5, -mainFrameHeight/2 + shapesAreaWidth, 0,
+        -shapesAreaLength/2 + i*shapesAreaLength/5, -mainFrameHeight/2, 0,
+    )
+}
+let shapeUIIndices: Array<number> = [];
+for (let i = 0; i < shapesUIVertices.length/3; i+=3) 
+    shapeUIIndices.push(i/3);
+
+// export const shapeUILinesGeometry = lineSegmentPositions(shapesUIVertices, shapeUIIndices);

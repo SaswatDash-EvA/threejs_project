@@ -51,3 +51,31 @@ export function createUpwardArrow(originX: number, originY: number, length: numb
     const points = shape.getPoints();
     return new LineGeometry().setFromPoints(points);
 }
+
+export function createLeftArrow(originX: number, originY: number, totalLength: number, totalHeight: number): LineGeometry {
+    const shape = new THREE.Path().moveTo(originX, originY);
+    shape.lineTo(originX + totalLength/2, originY + totalHeight/2)
+        .lineTo(originX + totalLength/2, originY + totalHeight/2 - totalHeight/5)
+        .lineTo(originX + totalLength, originY + totalHeight/2 - totalHeight/5)
+        .lineTo(originX + totalLength, originY - totalHeight/2 + totalHeight/5)
+        .lineTo(originX + totalLength/2, originY - totalHeight/2 + totalHeight/5)
+        .lineTo(originX + totalLength/2, originY - totalHeight/2)
+        .lineTo(originX, originY);
+
+    const points = shape.getPoints();
+    return new LineGeometry().setFromPoints(points);
+}
+
+export function createRightArrow(originX: number, originY: number, totalLength: number, totalHeight: number): LineGeometry {
+    const shape = new THREE.Path().moveTo(originX, originY);
+    shape.lineTo(originX - totalLength/2, originY + totalHeight/2)
+        .lineTo(originX - totalLength/2, originY + totalHeight/2 - totalHeight/5)
+        .lineTo(originX - totalLength, originY + totalHeight/2 - totalHeight/5)
+        .lineTo(originX - totalLength, originY - totalHeight/2 + totalHeight/5)
+        .lineTo(originX - totalLength/2, originY - totalHeight/2 + totalHeight/5)
+        .lineTo(originX - totalLength/2, originY - totalHeight/2)
+        .lineTo(originX, originY);
+
+    const points = shape.getPoints();
+    return new LineGeometry().setFromPoints(points);
+}

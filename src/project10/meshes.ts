@@ -1,5 +1,5 @@
 import { Line2, LineSegments2 } from 'three/examples/jsm/Addons.js';
-import { beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, designationResTextGeometry, designationTextGeometry, empIdResTextGeometry, empIdTextGeometry, hardwareDetHeight, heightSegment, hexagonGeometry, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainFrameHeight, mainFrameWidth, mainSceneUILinesGeometry, nameTextGeometry, outerFrameGeometry, outerInsideGeometry, profileHeightSegments, profileInlineGeometry, profileLength, profileOffset, profileOutlineGeometry, starGeometry, textSize, topTextGeometry, uiHeight, uiwidth, upwardArroeGeometry } from './geometries';
+import { beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, designationResTextGeometry, designationTextGeometry, empIdResTextGeometry, empIdTextGeometry, hardwareDetHeight, heightSegment, hexagonGeometry, leftArrowGeometry, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainFrameHeight, mainFrameWidth, mainSceneUILinesGeometry, nameTextGeometry, outerFrameGeometry, outerInsideGeometry, profileHeightSegments, profileInlineGeometry, profileLength, profileOffset, profileOutlineGeometry, rightArrowGeometry, starGeometry, textSize, topTextGeometry, uiHeight, uiwidth, upwardArroeGeometry } from './geometries';
 import { boundaryMaterial, dashedDividerMaterial, textMaterial, uiLinesMaterial, windowMaterial } from './materials';
 import { Mesh } from 'three';
 
@@ -70,5 +70,7 @@ export const profileInlines = new LineSegments2(profileInlineGeometry, uiLinesMa
 const hexagon = new Line2(hexagonGeometry, uiLinesMaterial);
 const star = new Line2(starGeometry, uiLinesMaterial);
 const upwardArrow = new Line2(upwardArroeGeometry, uiLinesMaterial);
+const leftArrow = new Line2(leftArrowGeometry, uiLinesMaterial);
+const rightArrow = new Line2(rightArrowGeometry, uiLinesMaterial);
 
-export const bottomMainPanelShapes: Array<Line2> = [hexagon, star, upwardArrow];
+export const bottomMainPanelShapes: Array<Line2> = [hexagon, star, upwardArrow, leftArrow, rightArrow];
