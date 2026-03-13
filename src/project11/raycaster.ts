@@ -7,27 +7,35 @@ let frameHighlighted = false, beadHighlighted = false;
 
 function setFrameColor(intersectedFrame: THREE.Mesh | undefined, primaryHex: string, clickedHex?: string) {
     windowFrames.forEach(mesh => {
-        const material = mesh.material as THREE.MeshBasicMaterial;
+        const material = mesh.material as THREE.MeshBasicMaterial[];
         if (intersectedFrame === mesh && clickedHex) {
-            material.color.set(clickedHex);
-            material.needsUpdate = true;
+            material.forEach(material => {
+                material.color.set(clickedHex);
+                material.needsUpdate = true;
+            });
             return;
-        }
-        material.color.set(primaryHex);
-        material.needsUpdate = true;
+        }     
+        material.forEach(material => {
+            material.color.set(primaryHex);
+            material.needsUpdate = true;
+        });
     });
 }
 
 function setBeadColor(intersectedBead: THREE.Mesh | undefined, primaryHex: string, clickedHex?: string) {
     beads.forEach(mesh => {
-        const material = mesh.material as THREE.MeshBasicMaterial;
+        const material = mesh.material as THREE.MeshBasicMaterial[];
         if (intersectedBead === mesh && clickedHex) {
-            material.color.set(clickedHex);
-            material.needsUpdate = true;
+            material.forEach(material => {
+                material.color.set(clickedHex);
+                material.needsUpdate = true;
+            });
             return;
         }     
-        material.color.set(primaryHex);
-        material.needsUpdate = true;
+        material.forEach(material => {
+            material.color.set(primaryHex);
+            material.needsUpdate = true;
+        });
     });
 }
 

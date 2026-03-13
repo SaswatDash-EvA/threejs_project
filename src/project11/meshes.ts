@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { frameGeometries, frameEdgeGeometries, beadGeometries, beadEdgeGeometries } from './geometries';
-import { profileEdgesMaterial, frameSkinMaterials, beadSkinMaterials } from './materials';
+import { frameGeometries, frameEdgeGeometries, beadGeometries, beadEdgeGeometries, glassGeometry, plusLinesGeometry } from './geometries';
+import { profileEdgesMaterial, frameSkinMaterials, beadSkinMaterials, glassMaterial } from './materials';
 
 export const beads = beadGeometries.map<THREE.Mesh>((geometry, index) => {
     const beadEdge = new THREE.LineSegments(beadEdgeGeometries[index], profileEdgesMaterial);
@@ -15,3 +15,8 @@ export const windowFrames = frameGeometries.map<THREE.Mesh>((geometry, index) =>
     const mesh = new THREE.Mesh(geometry, frameSkinMaterials[index]).add(frameEdge, beads[index]);
     return mesh;
 });
+
+export const glass = new THREE.Mesh(glassGeometry, glassMaterial);
+
+export const plusLine = new THREE.LineSegments(plusLinesGeometry, profileEdgesMaterial);
+glass.add(plusLine);

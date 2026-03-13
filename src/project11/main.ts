@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { windowHeight, windowWidth } from './dynamicVariables';
-import { windowFrames } from './meshes';
+import { glass, windowFrames } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { highlightMeshes, removeHighlights } from './raycaster';
 
@@ -35,7 +35,7 @@ updateScene(Math.max(windowWidth / aspect, windowHeight) * 1.5);
 
 new OrbitControls(camera, renderer.domElement);
 
-scene.add(...windowFrames);
+scene.add(...windowFrames, glass);
 
 function animate() {
     renderer.render(scene, camera);

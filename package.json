@@ -5,11 +5,13 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build",
+		"build": "tsgo --noEmit && vite build",
+    	"type-check": "tsgo --noEmit",
 		"preview": "vite preview"
 	},
 	"devDependencies": {
 		"@types/three": "^0.183.1",
+		"@typescript/native-preview": "^7.0.0-dev.20260312.1",
 		"typescript": "~5.9.3",
 		"vite": "^7.3.1"
 	},
