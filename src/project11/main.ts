@@ -1,10 +1,10 @@
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { windowHeight, windowWidth } from './dynamicVariables';
-import { backPlate, glass, windowFrames } from './meshes';
+import { backPlate, glass, midHoleCylinder, windowFrames } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { highlightMeshes, removeHighlights } from './raycaster';
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight, false);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
@@ -35,7 +35,7 @@ updateScene(Math.max(windowWidth / aspect, windowHeight) * 1.5);
 
 new OrbitControls(camera, renderer.domElement);
 
-scene.add(...windowFrames, glass, backPlate);
+scene.add(...windowFrames, glass, backPlate, midHoleCylinder);
 
 function animate() {
     renderer.render(scene, camera);

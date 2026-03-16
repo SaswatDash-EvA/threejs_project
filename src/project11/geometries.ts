@@ -45,7 +45,6 @@ export const frameGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.m
         steps: 1
     });
     cutBy45135(geometry, index + 1);
-    console.log(geometry);    
     return geometry;
 });
 

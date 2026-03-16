@@ -1,9 +1,8 @@
 import * as THREE from 'three';
 import { frameGeometries, frameEdgeGeometries, beadGeometries, beadEdgeGeometries, glassGeometry, plusLinesGeometry } from './geometries';
 import { profileEdgesMaterial, frameSkinMaterials, beadSkinMaterials, glassMaterial } from './materials';
-import { backPlateGeometry, handleGeometry } from './handleGeometries';
-import { handleHolderMaterial, handleMaterial } from './handleMaterials';
-import { frameW } from './dynamicVariables';
+import { backPlateGeometry, cylinderDomeGeometry, handleCurveGeometry, handleGeometry, handleHolderGeometry, midHoleCylinderGeometry } from './handleGeometries';
+import { handleHolderMaterial, backPlateMaterial, midCylinderMaterial } from './handleMaterials';
 
 export const beads = beadGeometries.map<THREE.Mesh>((geometry, index) => {
     const beadEdge = new THREE.LineSegments(beadEdgeGeometries[index], profileEdgesMaterial);
@@ -25,10 +24,17 @@ export const plusLine = new THREE.LineSegments(plusLinesGeometry, profileEdgesMa
 glass.add(plusLine);
 
 // Window Handle
-export const backPlate = new THREE.Mesh(backPlateGeometry, handleMaterial);
-backPlate.translateZ(frameW);
+export const backPlate = new THREE.Mesh(backPlateGeometry, backPlateMaterial);
 
 export const handle = new THREE.Mesh(handleGeometry, handleHolderMaterial);
-handle.translateZ(6);
 
-backPlate.add(handle);
+const handleCurve = new THREE.Mesh(handleCurveGeometry, handleHolderMaterial);
+
+const handleHolder = new THREE.Mesh(handleHolderGeometry, handleHolderMaterial);
+
+export const midHoleCylinder = new THREE.Mesh(midHoleCylinderGeometry, midCylinderMaterial);
+const midHoleDome = new THREE.Mesh(cylinderDomeGeometry, midCylinderMaterial);
+
+midHoleCylinder.add(midHoleDome)
+
+backPlate.add(handle, handleCurve, handleHolder);

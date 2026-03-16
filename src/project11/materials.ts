@@ -31,6 +31,3 @@ export const beadSkinMaterials = [
 export const glassMaterial = new THREE.MeshBasicMaterial({ color: "#8bcbff" })
 
 export const profileEdgesMaterial = new THREE.LineBasicMaterial({ color: "black" });
-profileEdgesMaterial.polygonOffset = true; // Applying offset because the lines are breaking like dashed lines
-profileEdgesMaterial.polygonOffsetFactor = 1; 
-profileEdgesMaterial.polygonOffsetUnits = 1;
