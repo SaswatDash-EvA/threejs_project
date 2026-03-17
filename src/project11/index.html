@@ -6,6 +6,7 @@
 	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 	<title>Project 11 — Window Visualization</title>
 	<link rel="stylesheet" href="../../sidebar.css" />
+	<link rel="stylesheet" href="ui-overlay.css">
 	<style>
 		body {
 			margin: 0;
@@ -34,9 +35,39 @@
 		<a href="../lineCutting-project7/">Project 7</a>
 		<a href="../parent-childObjects-project8/">Project 8</a>
 		<a href="../raycaster-project9/">Project 9</a>
-        <a href="../project10/">Project 10</a>
-        <a href="../project11/">Project 11</a>
+		<a href="../project10/">Project 10</a>
+		<a href="../project11/">Project 11</a>
 
+	</div>
+
+	<!-- UI Overlay -->
+	<div id="ui-overlay">
+		<label>Handle Width</label>
+		<input type="range" id="handleWidth" min="10" max="150" value="90">
+
+		<label>Handle Height</label>
+		<input type="range" id="handleHeight" min="10" max="2000" value="500">
+
+		<label>Handle Position</label>
+		<input type="range" id="handlePosition" min="-1000" max="1000" value="0">
+
+		<label>Sides</label>
+		<div class="inline-toggles">
+			<label><input type="radio" name="side" id="left" value="0" checked> L</label>
+			<label><input type="radio" name="side" id="right" value="1"> R</label>
+			<label><input type="radio" name="side" id="top" value="2"> T</label>
+			<label><input type="radio" name="side" id="bottom" value="3"> B</label>
+		</div>
+
+		<label>
+			<input type="checkbox" id="backside"> Backside
+		</label>
+
+		<label>View Mode</label>
+		<div class="radio-group">
+			<label><input type="radio" name="viewMode" value="normal" checked> Normal</label>
+			<label><input type="radio" name="viewMode" value="realistic"> Realistic</label>
+		</div>
 	</div>
 
 	<script type="module" src="./main.ts"></script>

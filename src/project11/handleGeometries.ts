@@ -28,8 +28,8 @@ const handleShape = new THREE.Shape()
     // .arc(-cockSpurHolderWidth/2, 0, cockSpurHolderWidth/2, 0, Math.PI, true)
     // .lineTo(handleOriginX + cockSpurHeadRadius - cockSpurHolderWidth, handleOriginY - cockSpurHeadRadius * Math.sin(Math.PI/6) - (cockSpurHeadRadius * (1 + Math.cos(Math.PI/6)) - cockSpurHolderWidth) * Math.tan(7 * Math.PI/24))
     .arc(-(cockSpurHeadRadius * (1 + Math.cos(Math.PI/6)) - cockSpurHolderWidth) * Math.tan(7 * Math.PI/24) / Math.sin(5 * Math.PI/12), 0, (cockSpurHeadRadius * (1 + Math.cos(Math.PI/6)) - cockSpurHolderWidth) * Math.tan(7 * Math.PI/24) / Math.sin(5 * Math.PI/12), 0, 5 * Math.PI/12)
-    .lineTo(handleOriginX - cockSpurHeadRadius * Math.cos(Math.PI/6) - cockSpurHandleWidth + cockSpurHeadRadius *(1 + Math.cos(Math.PI/6)) + 10, handleOriginY - 3)
-    .arc(3 / Math.tan(5 * Math.PI/12), 3, Math.sqrt(Math.pow(5 / Math.tan(5 * Math.PI/12),2) + Math.pow(3, 2)), 19 * Math.PI/12, 7 * Math.PI/12, true)
+    .lineTo(handleOriginX - cockSpurHeadRadius * Math.cos(Math.PI/6) - cockSpurHandleWidth + cockSpurHeadRadius *(1 + Math.cos(Math.PI/6)), handleOriginY - 9)
+    .arc(0, 8, 8, 3 * Math.PI/2, 7 * Math.PI/12, true)
     .lineTo(handleOriginX - cockSpurHeadRadius * Math.cos(Math.PI/6), handleOriginY + cockSpurHeadRadius * Math.sin(Math.PI/6));
 
 const bezierHandleCurveShape = new THREE.Shape()

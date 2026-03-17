@@ -78,3 +78,13 @@ window.addEventListener("mouseup", () => {
 window.addEventListener("dragstart", (event: DragEvent) =>{
     event.preventDefault();
 });
+
+// let scaleX =1, scaleY = 1;
+// function setHandleWidth(value: number) {
+//     scaleX = value/cockSpurHandleWidth;
+//     changeScale(scaleX, scaleY);
+// }
+
+// function setHandleHeight(event: InputEvent) {
+
+// }

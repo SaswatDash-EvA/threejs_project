@@ -73,8 +73,8 @@ export const beadEdgeGeometries: Array<THREE.EdgesGeometry> = beadGeometries.map
 
 // + sign on the window to show it is fixed
 const lineEnds = new Float32Array([
-    -horizontalLineLength/2, 0, frameW - beadW, horizontalLineLength/2, 0, frameW - beadW,
-    0, verticalLineLength/2, frameW - beadW, 0, -verticalLineLength/2, frameW - beadW
+    -horizontalLineLength/2, 0, frameW - beadW + 0.1, horizontalLineLength/2, 0, frameW - beadW + 0.1,
+    0, verticalLineLength/2, frameW - beadW + 0.1, 0, -verticalLineLength/2, frameW - beadW + 0.1
 ]);
 export const plusLinesGeometry = new THREE.BufferGeometry();
 plusLinesGeometry.setAttribute('position', new THREE.BufferAttribute(lineEnds, 3));

@@ -1,0 +1,52 @@
+canvas {
+    display: block;
+  }
+
+  /* Overlay container */
+  #ui-overlay {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 260px;
+    background: rgba(30, 30, 30, 0.85);
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    font-size: 14px;
+  }
+
+  #ui-overlay label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+
+  #ui-overlay input[type="range"] {
+    width: 100%;
+  }
+
+  .inline-toggles {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .inline-toggles label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  .radio-group {
+    margin-top: 10px;
+  }
+
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }

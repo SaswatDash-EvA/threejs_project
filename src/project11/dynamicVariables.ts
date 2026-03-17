@@ -10,7 +10,7 @@ let beadThickness = 4;
 let GVA = frameH - frameH1, GHA = frameH - frameH1;
 
 // Window dimensions
-let windowHeight = 1500, windowWidth = 2000;
+let windowHeight = 2000, windowWidth = 2000;
 
 // + lines length
 let horizontalLineLength = 0.2 * windowWidth, verticalLineLength = 0.2 * windowHeight;
