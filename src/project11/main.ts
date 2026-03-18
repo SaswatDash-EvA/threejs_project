@@ -3,6 +3,8 @@ import { windowHeight, windowWidth } from './dynamicVariables';
 import { backPlate, glass, midHoleCylinder, windowFrames } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { highlightMeshes, removeHighlights } from './raycaster';
+import { changeScale, setBackSide, setHandlePositionOnFrame, switchToSide } from './dynamicChangeSystem';
+import { cockSpurHandleHeight, cockSpurHandleWidth } from './handleVariables';
 
 const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight, false);
@@ -79,12 +81,48 @@ window.addEventListener("dragstart", (event: DragEvent) =>{
     event.preventDefault();
 });
 
-// let scaleX =1, scaleY = 1;
-// function setHandleWidth(value: number) {
-//     scaleX = value/cockSpurHandleWidth;
-//     changeScale(scaleX, scaleY);
-// }
+let scaleX = 1, scaleY = 1;
+function setHandleWidth(value: number) {
+    scaleX = value/cockSpurHandleWidth;
+    changeScale(scaleX, scaleY);
+}
 
-// function setHandleHeight(event: InputEvent) {
+function setHandleHeight(value: number) {
+    scaleY = value/cockSpurHandleHeight;
+    changeScale(scaleX, scaleY);
+}
 
-// }
+const handleWidthSlider = document.getElementById("handleWidth") as HTMLInputElement;
+const handleHeightSlider = document.getElementById("handleHeight") as HTMLInputElement;
+const handlePositionSlider = document.getElementById("handlePosition") as HTMLInputElement;
+const handleSidePositioners = document.querySelectorAll('input[name="side"]') as NodeListOf<HTMLInputElement>;
+const handleBackPositioner = document.getElementById("backside") as HTMLInputElement;
+
+handleWidthSlider.addEventListener("input", (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    setHandleWidth(target.valueAsNumber);
+});
+
+handleHeightSlider.addEventListener("input", (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    setHandleHeight(target.valueAsNumber);
+});
+
+handlePositionSlider.addEventListener("input", (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    setHandlePositionOnFrame(target.valueAsNumber - windowHeight/2);
+});
+
+handleSidePositioners.forEach(sideOption => {
+    sideOption.addEventListener("change", (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        if (target.checked) {
+            switchToSide(parseInt(target.value));
+        }
+    });
+});
+
+handleBackPositioner.addEventListener("input", (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    setBackSide(target.checked);
+});

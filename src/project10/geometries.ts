@@ -109,7 +109,7 @@ export let mainCameraPosition = 2, mainCameraFOV = (Math.PI / 180) * 75;
 export let mainFrameHeight = 2 * mainCameraPosition * Math.tan(mainCameraFOV / 2), mainFrameWidth = mainFrameHeight * 0.65 * outerFrameWidth / outerFrameHeight;
 
 // Window geometries
-export let cornerCoordinates = [0.5, 0.9];
+export let cornerCoordinates = [0.5, 0.5];
 let outerWidth = 0.04, beadWidth = 0.02;
 
 const points = [

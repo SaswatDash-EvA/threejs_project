@@ -25,15 +25,21 @@ glass.add(plusLine);
 
 // Window Handle
 export const backPlate = new THREE.Mesh(backPlateGeometry, backPlateMaterial);
+backPlate.frustumCulled = false;
 
 export const handle = new THREE.Mesh(handleGeometry, handleHolderMaterial);
+handle.frustumCulled = false;
 
 const handleCurve = new THREE.Mesh(handleCurveGeometry, handleHolderMaterial);
+handleCurve.frustumCulled = false;
 
 const handleHolder = new THREE.Mesh(handleHolderGeometry, handleHolderMaterial);
+handleHolder.frustumCulled = false;
 
 export const midHoleCylinder = new THREE.Mesh(midHoleCylinderGeometry, midCylinderMaterial);
+midHoleCylinder.frustumCulled = false;
 const midHoleDome = new THREE.Mesh(cylinderDomeGeometry, midCylinderMaterial);
+midHoleDome.frustumCulled = false;
 
 midHoleCylinder.add(midHoleDome)
 
