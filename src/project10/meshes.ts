@@ -1,6 +1,6 @@
 import { Line2, LineSegments2 } from 'three/examples/jsm/Addons.js';
-import { beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, designationResTextGeometry, designationTextGeometry, empIdResTextGeometry, empIdTextGeometry, hardwareDetHeight, heightSegment, hexagonGeometry, leftArrowGeometry, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainFrameHeight, mainFrameWidth, mainSceneUILinesGeometry, nameTextGeometry, outerFrameGeometry, outerInsideGeometry, profileHeightSegments, profileInlineGeometry, profileLength, profileOffset, profileOutlineGeometry, rightArrowGeometry, starGeometry, textSize, topTextGeometry, uiHeight, uiwidth, upwardArroeGeometry } from './geometries';
-import { boundaryMaterial, dashedDividerMaterial, textMaterial, uiLinesMaterial, windowMaterial } from './materials';
+import { backPlateEdgesGeometry, backPlateGeometry, beadInsideGeometry, boundaryGeometry, cutSegmentsGeometry, dashedLineSegmentGeometry, designationResTextGeometry, designationTextGeometry, empIdResTextGeometry, empIdTextGeometry, handleEdgesGeometry, handleShapeGeometry, hardwareDetHeight, heightSegment, hexagonGeometry, leftArrowGeometry, lowerHeightSegments, lvl10TextGeometry, lvl2leftTextGeometry, lvl2RightTextGeometry, lvl3TextGeometry, lvl4TextGeometry, lvl6TextGeometry, lvl7RightTextGeometry, lvl7TextGeometry, lvl8TextGeometry, lvl9TextGeometry, mainFrameHeight, mainFrameWidth, mainSceneUILinesGeometry, midCircleGeometry, nameTextGeometry, outerFrameGeometry, outerInsideGeometry, profileHeightSegments, profileInlineGeometry, profileLength, profileOffset, profileOutlineGeometry, rightArrowGeometry, starGeometry, textSize, topTextGeometry, uiHeight, uiwidth, upwardArroeGeometry } from './geometries';
+import { boundaryMaterial, dashedDividerMaterial, handleMaterial, textMaterial, uiLinesMaterial, windowMaterial } from './materials';
 import { Mesh } from 'three';
 
 export const boundaryFrame = new Line2(boundaryGeometry, boundaryMaterial);
@@ -59,7 +59,17 @@ const cutLineSegments = new LineSegments2(cutSegmentsGeometry, windowMaterial);
 const dashedLineSegments = new LineSegments2(dashedLineSegmentGeometry, dashedDividerMaterial);
 dashedLineSegments.computeLineDistances();
 
-outerOutsideFrame.add(outerInsideFrame, beadInsideFrame, cutLineSegments, dashedLineSegments);
+const backPlate = new Mesh(backPlateGeometry, handleMaterial);
+const backPlateEdges = new LineSegments2(backPlateEdgesGeometry, windowMaterial);
+backPlate.add(backPlateEdges);
+
+const handle = new Mesh(handleShapeGeometry, handleMaterial);
+const handleEdges = new LineSegments2(handleEdgesGeometry, windowMaterial);
+const handleMidCircle = new Line2(midCircleGeometry, windowMaterial);
+
+handle.add(handleEdges, handleMidCircle);
+
+outerOutsideFrame.add(outerInsideFrame, beadInsideFrame, cutLineSegments, backPlate, handle, dashedLineSegments);
 outerOutsideFrame.translateY(0.2);
 
 // Profile UI

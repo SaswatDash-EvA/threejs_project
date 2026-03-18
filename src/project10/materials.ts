@@ -13,3 +13,5 @@ export const windowMaterial = new LineMaterial({ color: "#919191", linewidth: 2 
 export const dashedDividerMaterial = new LineMaterial({ color: "#313131", linewidth: 2, dashed: true, 
     dashSize: 0.08, gapSize: 0.01
 });
+
+export const handleMaterial = new THREE.MeshBasicMaterial({ color: "#f5f5f5" });

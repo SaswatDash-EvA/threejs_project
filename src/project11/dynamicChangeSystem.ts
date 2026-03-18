@@ -59,7 +59,7 @@ const orientedPosition = select(
 );
 const currentOrigin = select(
     isTopOrBottom,
-    vec3(0, (windowHeight - frameH) / 2, 0),
+    select(equal(sides, 2), vec3(0, (windowHeight - frameH) / 2, 0), vec3(0, -(windowHeight - frameH)/2, 0)),
     vec3(handleOriginX, handleOriginY, 0)
 );
 // const topHoleOrigin = select(

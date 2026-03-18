@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { FontLoader, LineGeometry, LineSegmentsGeometry, TextGeometry, type TextGeometryParameters } from 'three/examples/jsm/Addons.js';
 import helvetikerFont from 'three/examples/fonts/helvetiker_bold.typeface.json';
 import { createHexagon, createLeftArrow, createRightArrow, createStarShape, createUpwardArrow } from './shapes';
+import { beadH, frameH1, windowWidth } from '../project11/dynamicVariables';
+import { backPlateHeight, backPlateMidRadius, backPlateSideRadius, backPlateTopBottomFaceLength, cockSpurHandleHeight, cockSpurHandleWidth, cockSpurHeadRadius, cockSpurHolderWidth, handleOriginX, handleOriginY, midHoleRadius, topBottomHoleRadius } from '../project11/handleVariables';
 
 // Frame borders geometry
 export let outerFrameWidth = 0.75 * window.innerWidth, outerFrameHeight = 0.75 * window.innerHeight;
@@ -110,7 +112,7 @@ export let mainFrameHeight = 2 * mainCameraPosition * Math.tan(mainCameraFOV / 2
 
 // Window geometries
 export let cornerCoordinates = [0.5, 0.5];
-let outerWidth = 0.04, beadWidth = 0.02;
+let outerWidth = frameH1 * (2*cornerCoordinates[0] / windowWidth), beadWidth = beadH * (2*cornerCoordinates[0] / windowWidth);
 
 const points = [
     new THREE.Vector2(cornerCoordinates[0], cornerCoordinates[1]),
@@ -140,6 +142,46 @@ const cutLineSegmentPoints = [
 ]
 
 export const cutSegmentsGeometry = new LineSegmentsGeometry().setPositions(cutLineSegmentPoints);
+
+// Handle's geometry
+const backPlateShape = new THREE.Shape()
+    .moveTo((handleOriginX - backPlateMidRadius - backPlateTopBottomFaceLength) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY + backPlateHeight/2) * (2*cornerCoordinates[0]/windowWidth))
+    .lineTo((handleOriginX - backPlateMidRadius - backPlateTopBottomFaceLength) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY - backPlateHeight/2) * (2*cornerCoordinates[0]/windowWidth))
+    .lineTo((handleOriginX - backPlateMidRadius) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY - backPlateHeight/2) * (2*cornerCoordinates[0]/windowWidth))
+    .arc((backPlateMidRadius) * (2*cornerCoordinates[0]/windowWidth), 0, (backPlateMidRadius) * (2*cornerCoordinates[0]/windowWidth), Math.PI, Math.PI/2, true)
+    .arc(0, (backPlateSideRadius) * (2*cornerCoordinates[0]/windowWidth), (backPlateSideRadius) * (2*cornerCoordinates[0]/windowWidth), 3 * Math.PI/2, Math.PI/2)
+    .arc(0, (backPlateMidRadius) * (2*cornerCoordinates[0]/windowWidth), (backPlateMidRadius) * (2*cornerCoordinates[0]/windowWidth), 3 * Math.PI/2, Math.PI, true)
+    .lineTo((handleOriginX - backPlateMidRadius - backPlateTopBottomFaceLength) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY + backPlateHeight/2) * (2*cornerCoordinates[0]/windowWidth));
+
+const midHole = new THREE.Path().absarc(handleOriginX * (2*cornerCoordinates[0]/windowWidth), handleOriginY * (2*cornerCoordinates[0]/windowWidth), midHoleRadius * (2*cornerCoordinates[0]/windowWidth), 0, 2 * Math.PI);
+const topBottomHoles = [
+    new THREE.Path().absarc((handleOriginX - backPlateMidRadius - backPlateTopBottomFaceLength/2) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY + backPlateSideRadius + backPlateMidRadius/2) * (2*cornerCoordinates[0]/windowWidth), (topBottomHoleRadius) * (2*cornerCoordinates[0]/windowWidth), 0, 2 * Math.PI),
+    new THREE.Path().absarc((handleOriginX - backPlateMidRadius - backPlateTopBottomFaceLength/2) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY - backPlateSideRadius - backPlateMidRadius/2) * (2*cornerCoordinates[0]/windowWidth), (topBottomHoleRadius) * (2*cornerCoordinates[0]/windowWidth), 0, 2 * Math.PI)
+]
+backPlateShape.holes.push(midHole, ...topBottomHoles);
+
+const handleShape = new THREE.Shape()
+    .moveTo((handleOriginX - cockSpurHeadRadius * Math.cos(Math.PI/6)) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY + cockSpurHeadRadius * Math.sin(Math.PI/6)) * (2*cornerCoordinates[0]/windowWidth))
+    .absarc((handleOriginX) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY) * (2*cornerCoordinates[0]/windowWidth), (cockSpurHeadRadius) * (2*cornerCoordinates[0]/windowWidth), 5 * Math.PI/6, 0, true)
+    .lineTo((handleOriginX + cockSpurHeadRadius) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY - cockSpurHandleHeight + cockSpurHeadRadius + cockSpurHolderWidth) * (2*cornerCoordinates[0]/windowWidth))
+    .arc((-cockSpurHolderWidth/2) * (2*cornerCoordinates[0]/windowWidth), 0, (cockSpurHolderWidth/2) * (2*cornerCoordinates[0]/windowWidth), 0, Math.PI, true)
+    .lineTo((handleOriginX + cockSpurHeadRadius - cockSpurHolderWidth) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY - cockSpurHeadRadius * Math.sin(Math.PI/6) - (cockSpurHeadRadius * (1 + Math.cos(Math.PI/6)) - cockSpurHolderWidth) * Math.tan(7 * Math.PI/24)) * (2*cornerCoordinates[0]/windowWidth))
+    .arc((-(cockSpurHeadRadius * (1 + Math.cos(Math.PI/6)) - cockSpurHolderWidth) * Math.tan(7 * Math.PI/24) / Math.sin(5 * Math.PI/12)) * (2*cornerCoordinates[0]/windowWidth), 0, ((cockSpurHeadRadius * (1 + Math.cos(Math.PI/6)) - cockSpurHolderWidth) * Math.tan(7 * Math.PI/24) / Math.sin(5 * Math.PI/12)) * (2*cornerCoordinates[0]/windowWidth), 0, 5 * Math.PI/12)
+    .lineTo((handleOriginX - cockSpurHeadRadius * Math.cos(Math.PI/6) - cockSpurHandleWidth + cockSpurHeadRadius *(1 + Math.cos(Math.PI/6))) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY - 9) * (2*cornerCoordinates[0]/windowWidth))
+    .arc(0, (8) * (2*cornerCoordinates[0]/windowWidth), (8) * (2*cornerCoordinates[0]/windowWidth), 3 * Math.PI/2, 7 * Math.PI/12, true)
+    .lineTo((handleOriginX - cockSpurHeadRadius * Math.cos(Math.PI/6)) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY + cockSpurHeadRadius * Math.sin(Math.PI/6)) * (2*cornerCoordinates[0]/windowWidth));
+
+export const backPlateGeometry = new THREE.ShapeGeometry(backPlateShape, 64);
+export const backPlateEdgesGeometry = new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(backPlateGeometry));
+
+export const handleShapeGeometry = new THREE.ShapeGeometry(handleShape, 64);
+handleShapeGeometry.translate(0, 0, 0.001);
+
+export const handleEdgesGeometry = new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(handleShapeGeometry));
+
+const midCirclePoints = midHole.getPoints(240);
+export const midCircleGeometry = new LineGeometry().setFromPoints(midCirclePoints);
+midCircleGeometry.translate(0, 0, 0.002);
 
 // Divider dashes
 const dashedLinesSegmentPoints = [
