@@ -62,25 +62,14 @@ const currentOrigin = select(
     select(equal(sides, 2), vec3(0, (windowHeight - frameH) / 2, 0), vec3(0, -(windowHeight - frameH)/2, 0)),
     vec3(handleOriginX, handleOriginY, 0)
 );
-// const topHoleOrigin = select(
-//     isTopOrBottom,
-//     select(equal(sides, 2), vec3(-backPlateSideRadius - backPlateMidRadius/2, (windowHeight - frameH) / 2 + backPlateMidRadius + backPlateTopBottomFaceLength/2, 0), vec3(-backPlateSideRadius - backPlateMidRadius/2, (windowHeight - frameH) / 2 - backPlateMidRadius - backPlateTopBottomFaceLength/2, 0)),
-//     select(equal(sides, 0), vec3(handleOriginX - backPlateMidRadius - backPlateTopBottomFaceLength/2, handleOriginY + backPlateSideRadius + backPlateMidRadius/2, 0), vec3(handleOriginX + backPlateMidRadius + backPlateTopBottomFaceLength/2, handleOriginY + backPlateSideRadius + backPlateMidRadius/2, 0))
-// );
-
-// const bottomHoleOrigin = select(
-//     isTopOrBottom,
-//     select(equal(sides, 2), vec3(backPlateSideRadius + backPlateMidRadius/2, (windowHeight - frameH) / 2 + backPlateMidRadius + backPlateTopBottomFaceLength/2, 0), vec3(backPlateSideRadius + backPlateMidRadius/2, (windowHeight - frameH) / 2 - backPlateMidRadius - backPlateTopBottomFaceLength/2, 0)),
-//     select(equal(sides, 0), vec3(handleOriginX - backPlateMidRadius - backPlateTopBottomFaceLength/2, handleOriginY - backPlateSideRadius - backPlateMidRadius/2, 0), vec3(handleOriginX + backPlateMidRadius + backPlateTopBottomFaceLength/2, handleOriginY - backPlateSideRadius - backPlateMidRadius/2, 0))
-// );
 
 const centered = orientedPosition.sub(currentOrigin);
 
 const distXYFromOrigin = length(centered.xy);
 
 const scaled = vec3(
-    centered.x.mul(dynamicVars.x),
-    centered.y.mul(dynamicVars.y),
+    centered.x.mul(select(isTopOrBottom, dynamicVars.y, dynamicVars.x)),
+    centered.y.mul(select(isTopOrBottom, dynamicVars.x, dynamicVars.y)),
     centered.z
 ).add(currentOrigin);
 
@@ -93,9 +82,9 @@ const scaledPosition = select(
 const finalProjectionMatrix = select(
     equal(sides, 0),
     select(isBackSide, mirrorProjectionMatrix, mat4()),
-    rightSideMatrix.mul(
+    select(isTopOrBottom, select(isBackSide, mirrorProjectionMatrix, mat4()), rightSideMatrix.mul(
         select(isBackSide, mirrorProjectionMatrix, mat4())
-    )
+    ))
 );
 
 const positionVector = select(
@@ -159,11 +148,12 @@ export function setBackSide(set: boolean = true) {
 export function setHandlePositionOnFrame(position: number) {
     if (position > windowHeight/2) {
         positionVar.value = windowHeight/2;
-        return;
+        return windowHeight/2;
     }
     if (position < -windowHeight/2) {
         positionVar.value = -windowHeight/2;
-        return;
+        return -windowHeight/2;
     }
     positionVar.value = position;
+    return position;
 }

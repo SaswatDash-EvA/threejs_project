@@ -68,7 +68,7 @@ const handleEdges = new LineSegments2(handleEdgesGeometry, windowMaterial);
 const handleMidCircle = new Line2(midCircleGeometry, windowMaterial);
 
 handle.add(handleEdges, handleMidCircle);
-
+    
 outerOutsideFrame.add(outerInsideFrame, beadInsideFrame, cutLineSegments, backPlate, handle, dashedLineSegments);
 outerOutsideFrame.translateY(0.2);
 

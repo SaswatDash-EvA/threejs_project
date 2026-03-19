@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { FontLoader, LineGeometry, LineSegmentsGeometry, TextGeometry, type TextGeometryParameters } from 'three/examples/jsm/Addons.js';
 import helvetikerFont from 'three/examples/fonts/helvetiker_bold.typeface.json';
 import { createHexagon, createLeftArrow, createRightArrow, createStarShape, createUpwardArrow } from './shapes';
-import { beadH, frameH1, windowWidth } from '../project11/dynamicVariables';
+import { beadH, frameH, frameH1, windowWidth } from '../project11/dynamicVariables';
 import { backPlateHeight, backPlateMidRadius, backPlateSideRadius, backPlateTopBottomFaceLength, cockSpurHandleHeight, cockSpurHandleWidth, cockSpurHeadRadius, cockSpurHolderWidth, handleOriginX, handleOriginY, midHoleRadius, topBottomHoleRadius } from '../project11/handleVariables';
 
 // Frame borders geometry
@@ -172,16 +172,69 @@ const handleShape = new THREE.Shape()
     .lineTo((handleOriginX - cockSpurHeadRadius * Math.cos(Math.PI/6)) * (2*cornerCoordinates[0]/windowWidth), (handleOriginY + cockSpurHeadRadius * Math.sin(Math.PI/6)) * (2*cornerCoordinates[0]/windowWidth));
 
 export const backPlateGeometry = new THREE.ShapeGeometry(backPlateShape, 64);
-export const backPlateEdgesGeometry = new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(backPlateGeometry));
 
 export const handleShapeGeometry = new THREE.ShapeGeometry(handleShape, 64);
 handleShapeGeometry.translate(0, 0, 0.001);
 
-export const handleEdgesGeometry = new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(handleShapeGeometry));
-
 const midCirclePoints = midHole.getPoints(240);
 export const midCircleGeometry = new LineGeometry().setFromPoints(midCirclePoints);
 midCircleGeometry.translate(0, 0, 0.002);
+
+// Modify the handle based on project 11 properties
+const handleScaleX = sessionStorage.getItem("handleScaleX");
+const handleScaleY = sessionStorage.getItem("handleScaleY");
+const handlePosition = sessionStorage.getItem("handlePosition");
+const handleSide = sessionStorage.getItem("handleSide");
+if (handleScaleX && handleScaleY) {
+    backPlateGeometry.translate(-handleOriginX * (2*cornerCoordinates[0]/windowWidth), 0, 0);
+    handleShapeGeometry.translate(-handleOriginX * (2*cornerCoordinates[0]/windowWidth), 0, 0);
+    backPlateGeometry.scale(parseFloat(handleScaleX), parseFloat(handleScaleY), 1);
+    handleShapeGeometry.scale(parseFloat(handleScaleX), parseFloat(handleScaleY), 1);
+    backPlateGeometry.translate(handleOriginX * (2*cornerCoordinates[0]/windowWidth), 0, 0);
+    handleShapeGeometry.translate(handleOriginX * (2*cornerCoordinates[0]/windowWidth), 0, 0);
+}
+if (handlePosition && handleSide) {
+    const side = parseInt(handleSide);
+    // Move to the desired side and move along the frame to desired position
+    if (side == 0 || side == 1) {
+        if (side == 1){
+            const mirrorAlongX = new THREE.Matrix4(
+                -1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            );
+            backPlateGeometry.applyMatrix4(mirrorAlongX);
+            handleShapeGeometry.applyMatrix4(mirrorAlongX);
+            midCircleGeometry.applyMatrix4(mirrorAlongX);
+        }
+        backPlateGeometry.translate(0, parseFloat(handlePosition) * (2*cornerCoordinates[0]/windowWidth), 0);
+        handleShapeGeometry.translate(0, parseFloat(handlePosition) * (2*cornerCoordinates[0]/windowWidth), 0);
+        midCircleGeometry.translate(0, parseFloat(handlePosition) * (2*cornerCoordinates[0]/windowWidth), 0);
+    } else if (side == 2 || side == 3) {
+        // Moce to top
+        backPlateGeometry.translate(-handleOriginX * (2*cornerCoordinates[0]/windowWidth), 0, 0).rotateZ(-Math.PI/2).translate(0, cornerCoordinates[1] - (frameH/2) * (2*cornerCoordinates[0]/windowWidth), 0);
+        handleShapeGeometry.translate(-handleOriginX * (2*cornerCoordinates[0]/windowWidth), 0, 0).rotateZ(-Math.PI/2).translate(0, cornerCoordinates[1] - (frameH/2) * (2*cornerCoordinates[0]/windowWidth), 0);
+        midCircleGeometry.translate(-handleOriginX * (2*cornerCoordinates[0]/windowWidth), cornerCoordinates[1] - (frameH/2) * (2*cornerCoordinates[0]/windowWidth), 0);
+        if (side == 3) {
+            const mirrorAlongY = new THREE.Matrix4(
+                1, 0, 0, 0,
+                0, -1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            );
+            backPlateGeometry.applyMatrix4(mirrorAlongY);
+            handleShapeGeometry.applyMatrix4(mirrorAlongY);
+            midCircleGeometry.applyMatrix4(mirrorAlongY);
+        }
+        backPlateGeometry.translate(parseFloat(handlePosition) * (2*cornerCoordinates[0]/windowWidth), 0, 0);
+        handleShapeGeometry.translate(parseFloat(handlePosition) * (2*cornerCoordinates[0]/windowWidth), 0, 0);
+        midCircleGeometry.translate(parseFloat(handlePosition) * (2*cornerCoordinates[0]/windowWidth), 0, 0);
+    }
+}
+
+export const backPlateEdgesGeometry = new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(backPlateGeometry));
+export const handleEdgesGeometry = new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(handleShapeGeometry));
 
 // Divider dashes
 const dashedLinesSegmentPoints = [

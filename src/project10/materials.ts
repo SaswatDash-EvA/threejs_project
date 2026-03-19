@@ -14,4 +14,4 @@ export const dashedDividerMaterial = new LineMaterial({ color: "#313131", linewi
     dashSize: 0.08, gapSize: 0.01
 });
 
-export const handleMaterial = new THREE.MeshBasicMaterial({ color: "#f5f5f5" });
+export const handleMaterial = new THREE.MeshBasicMaterial({ color: "#f5f5f5", side: THREE.DoubleSide });

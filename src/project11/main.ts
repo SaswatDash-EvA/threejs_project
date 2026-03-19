@@ -82,14 +82,16 @@ window.addEventListener("dragstart", (event: DragEvent) =>{
 });
 
 let scaleX = 1, scaleY = 1;
-function setHandleWidth(value: number) {
+function setHandleWidth(value: number): number {
     scaleX = value/cockSpurHandleWidth;
     changeScale(scaleX, scaleY);
+    return scaleX;
 }
 
-function setHandleHeight(value: number) {
+function setHandleHeight(value: number): number {
     scaleY = value/cockSpurHandleHeight;
     changeScale(scaleX, scaleY);
+    return scaleY;
 }
 
 const handleWidthSlider = document.getElementById("handleWidth") as HTMLInputElement;
@@ -100,17 +102,17 @@ const handleBackPositioner = document.getElementById("backside") as HTMLInputEle
 
 handleWidthSlider.addEventListener("input", (event: Event) => {
     const target = event.target as HTMLInputElement;
-    setHandleWidth(target.valueAsNumber);
+    sessionStorage.setItem("handleScaleX", setHandleWidth(target.valueAsNumber).toString());
 });
 
 handleHeightSlider.addEventListener("input", (event: Event) => {
     const target = event.target as HTMLInputElement;
-    setHandleHeight(target.valueAsNumber);
+    sessionStorage.setItem("handleScaleY", setHandleHeight(target.valueAsNumber).toString());
 });
 
 handlePositionSlider.addEventListener("input", (event: Event) => {
     const target = event.target as HTMLInputElement;
-    setHandlePositionOnFrame(target.valueAsNumber - windowHeight/2);
+    sessionStorage.setItem("handlePosition", setHandlePositionOnFrame(target.valueAsNumber - windowHeight/2).toString());
 });
 
 handleSidePositioners.forEach(sideOption => {
@@ -119,6 +121,7 @@ handleSidePositioners.forEach(sideOption => {
         if (target.checked) {
             switchToSide(parseInt(target.value));
         }
+        sessionStorage.setItem("handleSide", target.value);
     });
 });
 
@@ -126,3 +129,8 @@ handleBackPositioner.addEventListener("input", (event: Event) => {
     const target = event.target as HTMLInputElement;
     setBackSide(target.checked);
 });
+
+sessionStorage.setItem("handleScaleX", "1");
+sessionStorage.setItem("handleScaleY", "1");
+sessionStorage.setItem("handlePosition", "0");
+sessionStorage.setItem("handleSide", "0");
