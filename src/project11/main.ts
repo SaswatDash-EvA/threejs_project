@@ -7,6 +7,7 @@ import { changeScale, setBackSide, setHandlePositionOnFrame, switchToSide } from
 import { cockSpurHandleHeight, cockSpurHandleWidth } from './handleVariables';
 
 const renderer = new THREE.WebGPURenderer({ antialias: true });
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight, false);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
@@ -37,7 +38,22 @@ updateScene(Math.max(windowWidth / aspect, windowHeight) * 1.5);
 
 new OrbitControls(camera, renderer.domElement);
 
-scene.add(...windowFrames, glass, backPlate, midHoleCylinder);
+const dirLight = new THREE.DirectionalLight("white", 5);
+dirLight.position.set(1000, 1000, 1000);
+dirLight.castShadow = true;
+
+dirLight.shadow.camera.left = -1000;
+dirLight.shadow.camera.right = 1000;
+dirLight.shadow.camera.top = 1000;
+dirLight.shadow.camera.bottom = -1000;
+dirLight.shadow.camera.near = 0.1;
+dirLight.shadow.camera.far = 5000;
+dirLight.shadow.mapSize.set(2048, 2048);
+dirLight.shadow.bias = -0.0001;
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+
+scene.add(...windowFrames, glass, backPlate, midHoleCylinder, dirLight, ambientLight);
 
 function animate() {
     renderer.render(scene, camera);

@@ -45,6 +45,7 @@ export const frameGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.m
         steps: 1
     });
     cutBy45135(geometry, index + 1);
+    geometry.computeTangents();
     return geometry;
 });
 
@@ -57,6 +58,7 @@ export const beadGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.ma
         steps: 1
     });
     heightMajor90Cut(geometry, index + 1);
+    geometry.computeTangents();
     return geometry;
 });
 

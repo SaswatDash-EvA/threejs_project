@@ -8,6 +8,8 @@ export const beads = beadGeometries.map<THREE.Mesh>((geometry, index) => {
     const beadEdge = new THREE.LineSegments(beadEdgeGeometries[index], profileEdgesMaterial);
 
     const mesh = new THREE.Mesh(geometry, beadSkinMaterials[index]).add(beadEdge);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     return mesh;
 });
 
@@ -15,6 +17,8 @@ export const windowFrames = frameGeometries.map<THREE.Mesh>((geometry, index) =>
     const frameEdge = new THREE.LineSegments(frameEdgeGeometries[index], profileEdgesMaterial);
 
     const mesh = new THREE.Mesh(geometry, frameSkinMaterials[index]).add(frameEdge, beads[index]);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     return mesh;
 });
 
@@ -26,20 +30,30 @@ glass.add(plusLine);
 // Window Handle
 export const backPlate = new THREE.Mesh(backPlateGeometry, backPlateMaterial);
 backPlate.frustumCulled = false;
+backPlate.castShadow = true;
+backPlate.receiveShadow = true;
 
 export const handle = new THREE.Mesh(handleGeometry, handleHolderMaterial);
 handle.frustumCulled = false;
+handle.castShadow = true;
+handle.receiveShadow = true;
 
 const handleCurve = new THREE.Mesh(handleCurveGeometry, handleHolderMaterial);
 handleCurve.frustumCulled = false;
+handleCurve.castShadow = true;
+handleCurve.receiveShadow = true;
 
 const handleHolder = new THREE.Mesh(handleHolderGeometry, handleHolderMaterial);
 handleHolder.frustumCulled = false;
+handleHolder.castShadow = true;
+handleHolder.receiveShadow = true;
 
 export const midHoleCylinder = new THREE.Mesh(midHoleCylinderGeometry, midCylinderMaterial);
 midHoleCylinder.frustumCulled = false;
 const midHoleDome = new THREE.Mesh(cylinderDomeGeometry, midCylinderMaterial);
 midHoleDome.frustumCulled = false;
+midHoleDome.castShadow = true;
+midHoleDome.receiveShadow = true;
 
 midHoleCylinder.add(midHoleDome)
 

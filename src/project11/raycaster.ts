@@ -32,7 +32,7 @@ function setBeadColor(intersectedBead: THREE.Mesh | undefined, primaryHex: strin
 }
 
 export function highlightMeshes(rayCaster: THREE.Raycaster): boolean {
-    const intersectedObjects = rayCaster.intersectObjects([...windowFrames, ...beads]);
+    const intersectedObjects = rayCaster.intersectObjects([...windowFrames]);
 
     if (intersectedObjects.length === 0) {
         removeHighlights();
