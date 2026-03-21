@@ -45,7 +45,22 @@ export const frameGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.m
         steps: 1
     });
     cutBy45135(geometry, index + 1);
-    geometry.computeTangents();
+    // const vertexPositions = geometry.attributes.position.array;
+    // const uvPositions = geometry.attributes.uv.array;
+    // if (index == 0 || index == 2) {
+    //     for (let i = 0; i < vertexPositions.length; i+=3) {
+    //         const x = vertexPositions[i], y = vertexPositions[i+1], z = vertexPositions[i+2];
+    //         uvPositions[i-i/3] = (y + z) * 0.001;
+    //         uvPositions[i-i/3+1] = x * 0.001;
+    //     }
+    // }
+    // else if (index == 1 || index == 3) {
+    //     for (let i = 0; i < vertexPositions.length; i+=3) {
+    //         const x = vertexPositions[i], y = vertexPositions[i+1], z = vertexPositions[i+2];
+    //         uvPositions[i-i/3] = (x + z) * 0.001;
+    //         uvPositions[i-i/3+1] = y * 0.001;
+    //     }
+    // }
     return geometry;
 });
 
@@ -58,7 +73,22 @@ export const beadGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.ma
         steps: 1
     });
     heightMajor90Cut(geometry, index + 1);
-    geometry.computeTangents();
+    // const vertexPositions = geometry.attributes.position.array;
+    // const uvPositions = geometry.attributes.uv.array;
+    // if (index == 0 || index == 2) {
+    //     for (let i = 0; i < vertexPositions.length; i+=3) {
+    //         const x = vertexPositions[i], y = vertexPositions[i+1], z = vertexPositions[i+2];
+    //         uvPositions[i-i/3] = (y + z) * 0.001;
+    //         uvPositions[i-i/3+1] = x * 0.001;
+    //     }
+    // }
+    // else if (index == 1 || index == 3) {
+    //     for (let i = 0; i < vertexPositions.length; i+=3) {
+    //         const x = vertexPositions[i], y = vertexPositions[i+1], z = vertexPositions[i+2];
+    //         uvPositions[i-i/3] = (x + z) * 0.001;
+    //         uvPositions[i-i/3+1] = y * 0.001;
+    //     }
+    // }
     return geometry;
 });
 

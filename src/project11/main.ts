@@ -42,14 +42,14 @@ const dirLight = new THREE.DirectionalLight("white", 5);
 dirLight.position.set(1000, 1000, 1000);
 dirLight.castShadow = true;
 
-dirLight.shadow.camera.left = -1000;
-dirLight.shadow.camera.right = 1000;
-dirLight.shadow.camera.top = 1000;
-dirLight.shadow.camera.bottom = -1000;
+dirLight.shadow.camera.left = -10000;
+dirLight.shadow.camera.right = 10000;
+dirLight.shadow.camera.top = 10000;
+dirLight.shadow.camera.bottom = -10000;
 dirLight.shadow.camera.near = 0.1;
 dirLight.shadow.camera.far = 5000;
-dirLight.shadow.mapSize.set(2048, 2048);
-dirLight.shadow.bias = -0.0001;
+dirLight.shadow.mapSize.set(8, 8);
+// dirLight.shadow.bias = -0.0001;
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 
