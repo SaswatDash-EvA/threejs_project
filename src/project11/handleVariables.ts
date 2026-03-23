@@ -1,3 +1,4 @@
+import * as THREE from 'three/webgpu';
 import { frameH, windowWidth } from "./dynamicVariables";
 
 let cockSpurHandleWidth = 90, cockSpurHandleHeight = 250;
@@ -9,7 +10,7 @@ let backPlateTopBottomFaceLength = backPlateWidth - backPlateSideRadius - backPl
 
 let midHoleRadius = 3*cockSpurHeadRadius/8, topBottomHoleRadius = Math.min(backPlateMidRadius, backPlateTopBottomFaceLength)/2.3;
 
-let handleOriginX = -(windowWidth - frameH)/2, handleOriginY = 0;
+let handleOrigin = new THREE.Vector3(-(windowWidth - frameH)/2, 0);
 
 export { cockSpurHandleHeight, cockSpurHandleWidth, cockSpurHolderWidth, cockSpurHeadRadius, backPlateHeight, backPlateWidth, 
-    handleOriginX, handleOriginY, backPlateSideRadius, backPlateMidRadius, backPlateTopBottomFaceLength, midHoleRadius, topBottomHoleRadius, cockSpurHandleDepth, cockSpurHandleCurveHeight };
+    handleOrigin, backPlateSideRadius, backPlateMidRadius, backPlateTopBottomFaceLength, midHoleRadius, topBottomHoleRadius, cockSpurHandleDepth, cockSpurHandleCurveHeight };

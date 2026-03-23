@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { uniform, vec3, mat4, select, equal, or, length, positionLocal } from 'three/tsl';
 
-import { handleOriginX, handleOriginY, midHoleRadius } from './handleVariables';
+import { handleOrigin, midHoleRadius } from './handleVariables';
 import { frameH, frameW, windowHeight } from './dynamicVariables';
 
 // Mirror across z = frameW / 2
@@ -60,7 +60,7 @@ const orientedPosition = select(
 const currentOrigin = select(
     isTopOrBottom,
     select(equal(sides, 2), vec3(0, (windowHeight - frameH) / 2, 0), vec3(0, -(windowHeight - frameH)/2, 0)),
-    vec3(handleOriginX, handleOriginY, 0)
+    vec3(handleOrigin.x, handleOrigin.y, 0)
 );
 
 const centered = orientedPosition.sub(currentOrigin);
