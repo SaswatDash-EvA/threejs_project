@@ -58,3 +58,27 @@ midHoleDome.receiveShadow = true;
 midHoleCylinder.add(midHoleDome)
 
 backPlate.add(handle, handleCurve, handleHolder);
+
+// Enum structure but type safety to erasable syntax only mode
+export const HandleSide = {
+    default: 0,
+    backSide: 1 << 0,
+    rightSide: 1 << 1,
+    bottomSide: 1 << 2
+} as const;
+export type HandleSide = typeof HandleSide[keyof typeof HandleSide];
+
+// Update materials of the handle and backplate based on it's position
+export function updateHandleSide(side: HandleSide) {
+    if ((((side & HandleSide.rightSide) || (side & HandleSide.bottomSide)) && !(side & HandleSide.backSide)) ||
+        !((side & HandleSide.rightSide) || (side & HandleSide.bottomSide)) && (side & HandleSide.backSide)) {
+        backPlate.material.side = THREE.BackSide;
+        handle.material.side = THREE.BackSide;
+        midHoleDome.material.side = THREE.BackSide;
+    }
+    else {
+        backPlate.material.side = THREE.FrontSide;
+        handle.material.side = THREE.FrontSide;
+        midHoleDome.material.side = THREE.FrontSide;
+    }
+}

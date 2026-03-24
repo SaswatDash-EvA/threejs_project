@@ -1,6 +1,6 @@
 import * as THREE from 'three/webgpu';
 import { windowHeight, windowWidth } from './dynamicVariables';
-import { backPlate, glass, midHoleCylinder, windowFrames } from './meshes';
+import { backPlate, glass, HandleSide, midHoleCylinder, updateHandleSide, windowFrames } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { highlightMeshes, removeHighlights } from './raycaster';
 import { changeScale, setBackSide, setHandlePositionOnFrame, switchToSide } from './dynamicChangeSystem';
@@ -116,6 +116,9 @@ const handlePositionSlider = document.getElementById("handlePosition") as HTMLIn
 const handleSidePositioners = document.querySelectorAll('input[name="side"]') as NodeListOf<HTMLInputElement>;
 const handleBackPositioner = document.getElementById("backside") as HTMLInputElement;
 
+let handleLocation: HandleSide = HandleSide.default;
+let currentHandleSide: HandleSide = HandleSide.default;
+
 handleWidthSlider.addEventListener("input", (event: Event) => {
     const target = event.target as HTMLInputElement;
     sessionStorage.setItem("handleScaleX", setHandleWidth(target.valueAsNumber).toString());
@@ -136,6 +139,36 @@ handleSidePositioners.forEach(sideOption => {
         const target = event.target as HTMLInputElement;
         if (target.checked) {
             switchToSide(parseInt(target.value));
+            switch (parseInt(target.value)) {
+                case 0:
+                    handleLocation &= ~currentHandleSide;
+                    currentHandleSide = HandleSide.default;
+                    updateHandleSide(handleLocation);
+                    break;
+
+                case 1:
+                    handleLocation &= ~currentHandleSide;
+                    handleLocation |= HandleSide.rightSide;
+                    currentHandleSide = HandleSide.rightSide;
+                    updateHandleSide(handleLocation);
+                    break;
+            
+                case 2:
+                    handleLocation &= ~currentHandleSide;
+                    currentHandleSide = HandleSide.default;
+                    updateHandleSide(handleLocation);
+                    break;
+
+                case 3:
+                    handleLocation &= ~currentHandleSide;
+                    handleLocation |= HandleSide.bottomSide;
+                    currentHandleSide = HandleSide.bottomSide;
+                    updateHandleSide(handleLocation);
+                    break;
+
+                default:
+                    break;
+            }
         }
         sessionStorage.setItem("handleSide", target.value);
     });
@@ -143,6 +176,9 @@ handleSidePositioners.forEach(sideOption => {
 
 handleBackPositioner.addEventListener("input", (event: Event) => {
     const target = event.target as HTMLInputElement;
+    if (target.checked) handleLocation |= HandleSide.backSide;
+    else handleLocation &= ~HandleSide.backSide;
+    updateHandleSide(handleLocation);
     setBackSide(target.checked);
 });
 

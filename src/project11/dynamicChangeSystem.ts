@@ -45,10 +45,16 @@ const isTopOrBottom = or(
     equal(sides, 3)
 );
 
+const currentOrigin = select(
+    isTopOrBottom,
+    select(equal(sides, 2), vec3(0, (windowHeight - frameH) / 2, 0), vec3(0, -(windowHeight - frameH)/2, 0)),
+    vec3(handleOrigin.x, handleOrigin.y, 0)
+);
+
 const rotatedPosition = select(
     isTopOrBottom,
-    rotateRight.mul(positionLocal),
-    positionLocal
+    rotateRight.mul(positionLocal.sub(vec3(handleOrigin.x, handleOrigin.y, 0))),
+    positionLocal.sub(vec3(handleOrigin.x, handleOrigin.y, 0))
 );
 
 // Apply bottom flip if needed
@@ -57,26 +63,25 @@ const orientedPosition = select(
     rotatedPosition.mul(bottomSideMatrix),
     rotatedPosition
 );
-const currentOrigin = select(
-    isTopOrBottom,
-    select(equal(sides, 2), vec3(0, (windowHeight - frameH) / 2, 0), vec3(0, -(windowHeight - frameH)/2, 0)),
-    vec3(handleOrigin.x, handleOrigin.y, 0)
-);
 
-const centered = orientedPosition.sub(currentOrigin);
+const distXYFromOrigin = length(orientedPosition.xy);
 
-const distXYFromOrigin = length(centered.xy);
+const scaledOutside = vec3(
+    orientedPosition.x.mul(select(isTopOrBottom, dynamicVars.y, dynamicVars.x)),
+    orientedPosition.y.mul(select(isTopOrBottom, dynamicVars.x, dynamicVars.y)),
+    orientedPosition.z
+).add(currentOrigin);
 
-const scaled = vec3(
-    centered.x.mul(select(isTopOrBottom, dynamicVars.y, dynamicVars.x)),
-    centered.y.mul(select(isTopOrBottom, dynamicVars.x, dynamicVars.y)),
-    centered.z
+const scaledInside = vec3(
+    orientedPosition.x.mul(select(dynamicVars.x.lessThan(dynamicVars.y), dynamicVars.x, dynamicVars.y)),
+    orientedPosition.y.mul(select(dynamicVars.x.lessThan(dynamicVars.y), dynamicVars.x, dynamicVars.y)),
+    orientedPosition.z
 ).add(currentOrigin);
 
 const scaledPosition = select(
     distXYFromOrigin.greaterThan(dynamicVars.z),
-    scaled,
-    orientedPosition
+    scaledOutside,
+    scaledInside
 );
 
 const finalProjectionMatrix = select(
