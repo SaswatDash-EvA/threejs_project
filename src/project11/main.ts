@@ -48,12 +48,29 @@ dirLight.shadow.camera.top = 10000;
 dirLight.shadow.camera.bottom = -10000;
 dirLight.shadow.camera.near = 0.1;
 dirLight.shadow.camera.far = 5000;
-dirLight.shadow.mapSize.set(8, 8);
-// dirLight.shadow.bias = -0.0001;
+dirLight.shadow.mapSize.set(8192, 8192);
+dirLight.shadow.bias = -0.005;
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const pointLights = [
+    new THREE.PointLight("white", 4000),
+    new THREE.PointLight("white", 4000),
+    new THREE.PointLight("white", 4000),
+    new THREE.PointLight("white", 4000)
+];
+pointLights.forEach((pointLight: THREE.PointLight, index: number) => {
+    pointLight.decay = 1.05;
+    pointLight.castShadow = true;
+    pointLight.position.x = -1100 + 1100 * index;
+    pointLight.position.z = -1000;
+    pointLight.shadow.camera.far = 2000;
+    pointLight.shadow.mapSize.set(1024, 1024);
+    pointLight.shadow.bias = -0.005;
+    pointLight.updateMatrixWorld();
+});
 
-scene.add(...windowFrames, glass, backPlate, midHoleCylinder, dirLight, ambientLight);
+
+scene.add(...windowFrames, glass, backPlate, midHoleCylinder, dirLight, ambientLight, ...pointLights);
 
 function animate() {
     renderer.render(scene, camera);

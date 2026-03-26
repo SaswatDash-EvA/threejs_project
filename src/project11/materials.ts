@@ -6,8 +6,8 @@ import displacementLink from "./assets/WoodFloor034_1K-JPG_Displacement.jpg";
 import AOLink from "./assets/WoodFloor034_1K-JPG_AmbientOcclusion.jpg";
 // import { materialColor, texture } from 'three/tsl';
 // import { fixedHorizontalUV, fixedNormalsForHorizontal, fixedNormalsForVertical, fixedVerticalUV } from './textureCorrection';
-import { materialColor, texture } from 'three/tsl';
-import { fixedHorizontalUV, fixedNormalsForHorizontal, fixedNormalsForVertical, fixedVerticalUV } from './textureCorrection';
+import { materialColor, normalMap, texture } from 'three/tsl';
+import { fixedHorizontalUV, fixedVerticalUV } from './textureCorrection';
 // import { defaultColor } from './dynamicVariables';
 
 const loader = new THREE.TextureLoader();
@@ -32,94 +32,98 @@ sideTexture.colorSpace = THREE.SRGBColorSpace;
 const verticalSideTextureNodes = [
     texture(sideTexture, fixedVerticalUV),
     texture(sideTextureAO, fixedVerticalUV),
-    fixedNormalsForVertical(sideTextureNormal),
-    texture(sideTextureRoughness, fixedVerticalUV)
+    normalMap(texture(sideTextureNormal, fixedVerticalUV)),
+    texture(sideTextureRoughness, fixedVerticalUV),
 ];
 const horizontalSideTextureNodes = [
     texture(sideTexture, fixedHorizontalUV),
     texture(sideTextureAO, fixedHorizontalUV),
-    fixedNormalsForHorizontal(sideTextureNormal),
-    texture(sideTextureRoughness, fixedHorizontalUV)
+    normalMap(texture(sideTextureNormal, fixedHorizontalUV)),
+    texture(sideTextureRoughness, fixedHorizontalUV),
 ];
 
 export const frameSkinMaterials = [
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: horizontalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: horizontalSideTextureNodes[2],
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: horizontalSideTextureNodes[2],
         roughnessNode: horizontalSideTextureNodes[3],
         aoNode: horizontalSideTextureNodes[1],
         // map: sideTexture,
         wireframe: false,
-        shadowSide: THREE.FrontSide
+        shadowSide: THREE.FrontSide,
+        normalScale: new THREE.Vector2(0, 0)
     }),
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: verticalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: verticalSideTextureNodes[2],
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: verticalSideTextureNodes[2],
         roughnessNode: verticalSideTextureNodes[3],
         aoNode: verticalSideTextureNodes[1],
         // map: sideTexture,
         wireframe: false,
-        shadowSide: THREE.FrontSide
+        shadowSide: THREE.FrontSide,
+        normalScale: new THREE.Vector2(0, 0)
     }),
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: horizontalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: horizontalSideTextureNodes[2],
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: horizontalSideTextureNodes[2],
         roughnessNode: horizontalSideTextureNodes[3],
         aoNode: horizontalSideTextureNodes[1],
         // map: sideTexture,
         wireframe: false,
-        shadowSide: THREE.FrontSide
+        shadowSide: THREE.FrontSide,
+        normalScale: new THREE.Vector2(0, 0)
     }),
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: verticalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: verticalSideTextureNodes[2],
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: verticalSideTextureNodes[2],
         roughnessNode: verticalSideTextureNodes[3],
         aoNode: verticalSideTextureNodes[1],
         // map: sideTexture,
         wireframe: false,
-        shadowSide: THREE.FrontSide
+        shadowSide: THREE.FrontSide,
+        normalScale: new THREE.Vector2(0, 0)
     })
 ];
 
 export const beadSkinMaterials = [
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: horizontalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: horizontalSideTextureNodes[2],
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: horizontalSideTextureNodes[2],
         roughnessNode: horizontalSideTextureNodes[3],
         aoNode: horizontalSideTextureNodes[1],
         // map: sideTexture,
         wireframe: false,
         shadowSide: THREE.FrontSide
     }),
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: verticalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: verticalSideTextureNodes[2],
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: verticalSideTextureNodes[2],
         roughnessNode: verticalSideTextureNodes[3],
         aoNode: verticalSideTextureNodes[1],
         // map: sideTexture,
         wireframe: false,
         shadowSide: THREE.FrontSide
     }),
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: horizontalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: horizontalSideTextureNodes[2],
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: horizontalSideTextureNodes[2],
         roughnessNode: horizontalSideTextureNodes[3],
         aoNode: horizontalSideTextureNodes[1],
         // map: sideTexture,
         wireframe: false,
         shadowSide: THREE.FrontSide
     }),
-    new THREE.MeshStandardNodeMaterial({ 
+    new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
-        colorNode: verticalSideTextureNodes[0].mul(materialColor.toColor()),
-        // normalNode: verticalSideTextureNodes[2],
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+        normalNode: verticalSideTextureNodes[2],
         roughnessNode: verticalSideTextureNodes[3],
         aoNode: verticalSideTextureNodes[1],
         // map: sideTexture,
@@ -128,6 +132,6 @@ export const beadSkinMaterials = [
     })
 ];
 
-export const glassMaterial = new THREE.MeshStandardMaterial({ color: "#8bcbff", transparent: true, opacity: 0.7 });
+export const glassMaterial = new THREE.MeshPhysicalMaterial({ color: "#8bcbff", transparent: true, opacity: 0.7 });
 
 export const profileEdgesMaterial = new THREE.LineBasicMaterial({ color: "black" });

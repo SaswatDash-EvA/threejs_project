@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { BufferGeometryUtils } from 'three/examples/jsm/Addons.js';
 import { beadH, beadThickness, beadW, frameH, frameH1, frameW, frameW1, GHA, GVA, horizontalLineLength, verticalLineLength, windowHeight, windowWidth } from './dynamicVariables';
 import { cutBy45135, heightMajor90Cut } from './polygonCutting';
 import { Line3, type Point } from './customObjects';
@@ -36,15 +37,18 @@ const windowBorderLines = [
 
 // Step-3: extrude along the rectangle
 // Retrun a new extruded frame geometry for each LineCurve3
-export const frameGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.map<THREE.ExtrudeGeometry>((line, index) => {
+export const frameGeometries: Array<THREE.BufferGeometry> = windowBorderLines.map<THREE.BufferGeometry>((line, index) => {
     const extrudePath = new THREE.CurvePath<THREE.Vector3>();
     extrudePath.add(line);
     const geometry =  new THREE.ExtrudeGeometry(frameShape, {
         extrudePath,
         bevelEnabled: false, 
-        steps: 1
+        steps: 100
     });
     cutBy45135(geometry, index + 1);
+    const indexedGeometry = BufferGeometryUtils.mergeVertices(geometry);
+    indexedGeometry.computeVertexNormals();
+    console.log(indexedGeometry);    
     // const vertexPositions = geometry.attributes.position.array;
     // const uvPositions = geometry.attributes.uv.array;
     // if (index == 0 || index == 2) {
@@ -61,18 +65,21 @@ export const frameGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.m
     //         uvPositions[i-i/3+1] = y * 0.001;
     //     }
     // }
-    return geometry;
+    return indexedGeometry;
 });
 
-export const beadGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.map<THREE.ExtrudeGeometry>((line, index) => {
+export const beadGeometries: Array<THREE.BufferGeometry> = windowBorderLines.map<THREE.BufferGeometry>((line, index) => {
     const extrudePath = new THREE.CurvePath<THREE.Vector3>();
     extrudePath.add(line);
     const geometry =  new THREE.ExtrudeGeometry(beadShape, {
         extrudePath,
         bevelEnabled: false, 
-        steps: 1
+        steps: 100
     });
     heightMajor90Cut(geometry, index + 1);
+    const indexedGeometry = BufferGeometryUtils.mergeVertices(geometry);
+    indexedGeometry.computeVertexNormals();
+    console.log(indexedGeometry);    
     // const vertexPositions = geometry.attributes.position.array;
     // const uvPositions = geometry.attributes.uv.array;
     // if (index == 0 || index == 2) {
@@ -89,7 +96,7 @@ export const beadGeometries: Array<THREE.ExtrudeGeometry> = windowBorderLines.ma
     //         uvPositions[i-i/3+1] = y * 0.001;
     //     }
     // }
-    return geometry;
+    return indexedGeometry;
 });
 
 // Geometry for glass
