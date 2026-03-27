@@ -1,6 +1,6 @@
 import * as THREE from 'three/webgpu';
 import { windowHeight, windowWidth } from './dynamicVariables';
-import { backPlate, glass, HandleSide, midHoleCylinder, updateHandleSide, windowFrames } from './meshes';
+import { backPlate, changeToNormalView, changeToRealisticView, glass, HandleSide, midHoleCylinder, updateHandleSide, windowFrames } from './meshes';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { highlightMeshes, removeHighlights } from './raycaster';
 import { changeScale, setBackSide, setHandlePositionOnFrame, switchToSide } from './dynamicChangeSystem';
@@ -8,6 +8,7 @@ import { cockSpurHandleHeight, cockSpurHandleWidth } from './handleVariables';
 
 const renderer = new THREE.WebGPURenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(window.innerWidth, window.innerHeight, false);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
@@ -42,18 +43,17 @@ const dirLight = new THREE.DirectionalLight("white", 5);
 dirLight.position.set(1000, 1000, 1000);
 dirLight.castShadow = true;
 
-dirLight.shadow.camera.left = -10000;
-dirLight.shadow.camera.right = 10000;
-dirLight.shadow.camera.top = 10000;
-dirLight.shadow.camera.bottom = -10000;
+dirLight.shadow.camera.left = -2000;
+dirLight.shadow.camera.right = 2000;
+dirLight.shadow.camera.top = 2000;
+dirLight.shadow.camera.bottom = -2000;
 dirLight.shadow.camera.near = 0.1;
 dirLight.shadow.camera.far = 5000;
 dirLight.shadow.mapSize.set(8192, 8192);
-dirLight.shadow.bias = -0.005;
+dirLight.shadow.bias = -0.0001;
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 const pointLights = [
-    new THREE.PointLight("white", 4000),
     new THREE.PointLight("white", 4000),
     new THREE.PointLight("white", 4000),
     new THREE.PointLight("white", 4000)
@@ -132,6 +132,8 @@ const handleHeightSlider = document.getElementById("handleHeight") as HTMLInputE
 const handlePositionSlider = document.getElementById("handlePosition") as HTMLInputElement;
 const handleSidePositioners = document.querySelectorAll('input[name="side"]') as NodeListOf<HTMLInputElement>;
 const handleBackPositioner = document.getElementById("backside") as HTMLInputElement;
+const normalViewModeToggle = document.getElementById("normalView") as HTMLInputElement;
+const realisticViewModeToggle = document.getElementById("realisticView") as HTMLInputElement;
 
 let handleLocation: HandleSide = HandleSide.default;
 let currentHandleSide: HandleSide = HandleSide.default;
@@ -197,6 +199,16 @@ handleBackPositioner.addEventListener("input", (event: Event) => {
     else handleLocation &= ~HandleSide.backSide;
     updateHandleSide(handleLocation);
     setBackSide(target.checked);
+});
+
+normalViewModeToggle.addEventListener("input", (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.checked) changeToNormalView();
+});
+
+realisticViewModeToggle.addEventListener("input", (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.checked) changeToRealisticView();
 });
 
 sessionStorage.setItem("handleScaleX", "1");

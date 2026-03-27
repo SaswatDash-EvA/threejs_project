@@ -42,7 +42,7 @@ const horizontalSideTextureNodes = [
     texture(sideTextureRoughness, fixedHorizontalUV),
 ];
 
-export const frameSkinMaterials = [
+export const frameSkinPhysicalMaterials = [
     new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
         colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
@@ -89,7 +89,7 @@ export const frameSkinMaterials = [
     })
 ];
 
-export const beadSkinMaterials = [
+export const beadSkinPhysicalMaterials = [
     new THREE.MeshPhysicalNodeMaterial({ 
         color: "white", 
         colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
@@ -129,6 +129,44 @@ export const beadSkinMaterials = [
         // map: sideTexture,
         wireframe: false,
         shadowSide: THREE.FrontSide
+    })
+];
+
+export const frameSkinMaterial = [
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+    }),
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+    }),
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+    }),
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+    })
+];
+
+export const beadSkinMaterial = [
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+    }),
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+    }),
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: horizontalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
+    }),
+    new THREE.MeshBasicNodeMaterial({ 
+        color: "white", 
+        colorNode: verticalSideTextureNodes[0].toVec4().mul(materialColor.toColor()),
     })
 ];
 

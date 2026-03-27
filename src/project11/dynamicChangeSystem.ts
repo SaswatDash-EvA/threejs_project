@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { uniform, vec3, mat4, select, equal, or, length, positionLocal } from 'three/tsl';
+import { uniform, vec3, mat4, select, equal, or, length, positionLocal, normalLocal } from 'three/tsl';
 
 import { handleOrigin, midHoleRadius } from './handleVariables';
 import { frameH, frameW, windowHeight } from './dynamicVariables';
@@ -104,6 +104,14 @@ const transformedPosition =
         .xyz;
 
 export const handlePositionShader = transformedPosition.add(positionVector);
+
+// Change handle normals when changed sides
+// const backNormal = select(isBackSide, normalLocal.mul(vec3(1, 1, -1)), normalLocal);
+
+export const rotatedNormal = select(
+    isTopOrBottom, 
+    select(equal(sides, 2), rotateRight.mul(normalLocal), rotateRight.mul(normalLocal).mul(vec3(1, -1, 1))), 
+    select(equal(sides, 0), normalLocal, normalLocal.mul(vec3(-1, 1, 1))));
 
 function switchToTop() {
     sides.value = 2;
